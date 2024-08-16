@@ -12,6 +12,7 @@
 		B7464D182C6D67260090E206 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7464D172C6D67260090E206 /* DashboardView.swift */; };
 		B7464D1A2C6D672B0090E206 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7464D192C6D672B0090E206 /* Assets.xcassets */; };
 		B7464D1D2C6D672B0090E206 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7464D1C2C6D672B0090E206 /* Preview Assets.xcassets */; };
+		B7F648C02C6FF92900C07B8C /* HealthKitPermissionPrimingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F648BF2C6FF92900C07B8C /* HealthKitPermissionPrimingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		B7464D172C6D67260090E206 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		B7464D192C6D672B0090E206 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B7464D1C2C6D672B0090E206 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		B7F648BF2C6FF92900C07B8C /* HealthKitPermissionPrimingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPermissionPrimingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 				B7464D152C6D67260090E206 /* SeguimientoApp.swift */,
 				B7464D172C6D67260090E206 /* DashboardView.swift */,
 				B7425CCD2C6FA7DE00621E3B /* HealthDataListView.swift */,
+				B7F648BF2C6FF92900C07B8C /* HealthKitPermissionPrimingView.swift */,
 				B7464D192C6D672B0090E206 /* Assets.xcassets */,
 				B7464D1B2C6D672B0090E206 /* Preview Content */,
 			);
@@ -143,6 +146,7 @@
 				B7425CCE2C6FA7DE00621E3B /* HealthDataListView.swift in Sources */,
 				B7464D182C6D67260090E206 /* DashboardView.swift in Sources */,
 				B7464D162C6D67260090E206 /* SeguimientoApp.swift in Sources */,
+				B7F648C02C6FF92900C07B8C /* HealthKitPermissionPrimingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
