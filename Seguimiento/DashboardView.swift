@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  DashboardView.swift
 //  Seguimiento
 //
 //  Created by Fede Garcia on 14/08/2024.
@@ -22,7 +22,7 @@ enum HealthMetricContent: CaseIterable, Identifiable {
     }
 }
 
-struct ContentView: View {
+struct DashboardView: View {
     
     @State private var selectedStat: HealthMetricContent = .steps
     var isSteps: Bool { selectedStat == .steps }
@@ -51,7 +51,6 @@ struct ContentView: View {
                                 }
                                         
                                 Spacer()
-                                
                                 Image(systemName: "chevron.right")
                             }
                         }
@@ -87,18 +86,14 @@ struct ContentView: View {
                 .padding()
                 .navigationTitle("Dashboard")
                 .navigationDestination(for: HealthMetricContent.self) { metric in
-                    Text(metric.title)
+                    HealthDataListView(metric: metric)
                 }
-                
             }
-           
-           
         }
        .tint(isSteps ? .teal : .indigo)
-            
     }
 }
 
 #Preview {
-    ContentView()
+    DashboardView()
 }
