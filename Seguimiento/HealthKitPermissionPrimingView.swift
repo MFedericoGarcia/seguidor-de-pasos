@@ -13,6 +13,7 @@ struct HealthKitPermissionPrimingView: View {
     @Environment(HealthKitManager.self) private var hkManager
     @Environment(\.dismiss) private var dismiss
     @State private var isShowingHealthKitPermissions = false
+    @Binding var hasSeen: Bool
     
     var description = """
     Esta applicación exhibe información de Health en gráficos interactivos.
@@ -29,7 +30,7 @@ struct HealthKitPermissionPrimingView: View {
                     .shadow(color: .gray.opacity(0.4), radius: 16)
                     .padding(.bottom, 12)
                 
-                Text("Apple Health Integration")
+                Text("Integración - Apple Health")
                     .font(.title2).bold()
                 
                 Text(description)
@@ -44,14 +45,16 @@ struct HealthKitPermissionPrimingView: View {
             .bold()
         }
         .padding(30)
+        .interactiveDismissDisabled()
+        .onAppear{ hasSeen = true }
         .healthDataAccessRequest(store: hkManager.store,
                                  shareTypes: hkManager.types,
                                  readTypes: hkManager.types,
                                  trigger: isShowingHealthKitPermissions) { result in
             switch result {
-            case .success(let success):
+            case .success(_):
                 dismiss()
-            case .failure(let failure):
+            case .failure(_):
                 // Handle the error later
                 dismiss()
             }
@@ -60,6 +63,6 @@ struct HealthKitPermissionPrimingView: View {
 }
 
 #Preview {
-    HealthKitPermissionPrimingView()
+    HealthKitPermissionPrimingView(hasSeen: .constant(true))
         .environment(HealthKitManager())
 }

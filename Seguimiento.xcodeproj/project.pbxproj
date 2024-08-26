@@ -63,9 +63,9 @@
 				B7464D172C6D67260090E206 /* DashboardView.swift */,
 				B7425CCD2C6FA7DE00621E3B /* HealthDataListView.swift */,
 				B7F648BF2C6FF92900C07B8C /* HealthKitPermissionPrimingView.swift */,
+				B7F648C22C70019700C07B8C /* HealthKitManager.swift */,
 				B7464D192C6D672B0090E206 /* Assets.xcassets */,
 				B7464D1B2C6D672B0090E206 /* Preview Content */,
-				B7F648C22C70019700C07B8C /* HealthKitManager.swift */,
 			);
 			path = Seguimiento;
 			sourceTree = "<group>";
