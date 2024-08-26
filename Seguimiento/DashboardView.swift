@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import Charts
 enum HealthMetricContent: CaseIterable, Identifiable {
     case steps, weight
     
@@ -24,12 +24,15 @@ enum HealthMetricContent: CaseIterable, Identifiable {
 
 struct DashboardView: View {
     
+    //MARK: - Variables
+    
     @Environment(HealthKitManager.self) private var hkManager
     @AppStorage("hasSeenPermissionPriming") private var hasSeenPermissionPriming = false
     @State private var isShowingPermissionPrimingSheet = false
     @State private var selectedStat: HealthMetricContent = .steps
-    
     var isSteps: Bool { selectedStat == .steps }
+    
+    //MARK: - Body
     
     var body: some View {
        NavigationStack {
@@ -41,6 +44,8 @@ struct DashboardView: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                   
+                    //MARK: - Steps / Weight  Chart
                     
                     VStack {
                         NavigationLink(value: selectedStat){
@@ -61,12 +66,18 @@ struct DashboardView: View {
                         .foregroundStyle(.secondary)
                         .padding(.bottom, 12)
                         
-                        RoundedRectangle(cornerRadius: 12)
-                            .foregroundStyle(.secondary)
-                            .frame(height: 150)
+                        Chart {
+                            ForEach(hkManager.stepData) { steps in
+                                BarMark(x: .value("Fecha", steps.date, unit: .day),
+                                        y: .value("Pasos", steps.value))
+                            }
+                        }
+                        .frame(height: 150)
                     }
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
+                    
+                    //MARK: - Average Chart
                     
                     VStack(alignment: .leading) {
                             VStack(alignment: .leading) {
@@ -88,13 +99,18 @@ struct DashboardView: View {
                     .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
                 }
                 .padding()
-                .task {
-                    isShowingPermissionPrimingSheet = !hasSeenPermissionPriming
-                }
                 .navigationTitle("Dashboard")
                 .navigationDestination(for: HealthMetricContent.self) { metric in
                     HealthDataListView(metric: metric)
                 }
+                
+                //MARK: - Charts end
+                
+                .task {
+                    await hkManager.fetchStepCount()
+                    isShowingPermissionPrimingSheet = !hasSeenPermissionPriming
+                }
+                
                 .sheet(isPresented: $isShowingPermissionPrimingSheet, onDismiss: {
                     
                 }, content: {
