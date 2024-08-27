@@ -73,7 +73,7 @@ struct DashboardView: View {
                 .padding()
                 .navigationTitle("Dashboard")
                 .navigationDestination(for: HealthMetricContent.self) { metric in
-                    HealthDataListView(metric: metric)
+                    HealthDataListView(metric: metric, number: hkManager.stepData)
                 }
                 
                 //MARK: - Charts end
@@ -91,8 +91,6 @@ struct DashboardView: View {
         }
        .tint(isSteps ? .teal : .indigo)
     }
-    
-    
 }
 
 #Preview {
