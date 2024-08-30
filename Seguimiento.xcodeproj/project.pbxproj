@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B71A83162C827A63005BD6D6 /* StepPieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71A83152C827A63005BD6D6 /* StepPieChart.swift */; };
 		B7243CA22C7E54A200EDCBEB /* StepBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7243CA12C7E54A200EDCBEB /* StepBarChart.swift */; };
 		B7243CA82C7E67DB00EDCBEB /* ChartMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7243CA72C7E67DB00EDCBEB /* ChartMath.swift */; };
 		B7243CAA2C7E6BBD00EDCBEB /* ChartDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7243CA92C7E6BBD00EDCBEB /* ChartDataTypes.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B71A83152C827A63005BD6D6 /* StepPieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepPieChart.swift; sourceTree = "<group>"; };
 		B7243CA12C7E54A200EDCBEB /* StepBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepBarChart.swift; sourceTree = "<group>"; };
 		B7243CA72C7E67DB00EDCBEB /* ChartMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartMath.swift; sourceTree = "<group>"; };
 		B7243CA92C7E6BBD00EDCBEB /* ChartDataTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDataTypes.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				B7243CA12C7E54A200EDCBEB /* StepBarChart.swift */,
 				B7243CA72C7E67DB00EDCBEB /* ChartMath.swift */,
 				B7243CA92C7E6BBD00EDCBEB /* ChartDataTypes.swift */,
+				B71A83152C827A63005BD6D6 /* StepPieChart.swift */,
 			);
 			path = Charts;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 				B7243CA82C7E67DB00EDCBEB /* ChartMath.swift in Sources */,
 				B75CFD652C7D44FD00336068 /* HealthMetric.swift in Sources */,
 				B7243CAA2C7E6BBD00EDCBEB /* ChartDataTypes.swift in Sources */,
+				B71A83162C827A63005BD6D6 /* StepPieChart.swift in Sources */,
 				B7243CAD2C7E6C9200EDCBEB /* Date+Ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -51,32 +51,16 @@ struct DashboardView: View {
                     
                     //MARK: - Average Chart
                     
-                    VStack(alignment: .leading) {
-                            VStack(alignment: .leading) {
-                                Label("Promedio", systemImage: "calendar")
-                                    .font(.title3.bold())
-                                    .foregroundStyle(.teal)
-                                
-                                Text("Últimos 28 Días")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                            .padding(.bottom, 12)
-                          
-                        RoundedRectangle(cornerRadius: 12)
-                            .foregroundStyle(.secondary)
-                            .frame(height: 240)
-                    }
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
+                    StepPieChart(chartData: ChartMath.averageWeekdayCount(for: hkManager.stepData))
+                    
+                //MARK: - Charts end
+                    
                 }
                 .padding()
                 .navigationTitle("Dashboard")
                 .navigationDestination(for: HealthMetricContent.self) { metric in
                     HealthDataListView(metric: metric, number: hkManager.stepData)
                 }
-                
-                //MARK: - Charts end
                 
                 .task {
                     await hkManager.fetchStepCount()
