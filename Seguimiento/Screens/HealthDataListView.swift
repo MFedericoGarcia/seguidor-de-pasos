@@ -9,16 +9,17 @@ import SwiftUI
 
 struct HealthDataListView: View {
     var metric: HealthMetricContent
+    var number: [HealthMetric]?
     @State var isShowingAddData: Bool = false
     @State var addDataDate: Date = .now
     @State var addValue: String = ""
     
     var body: some View {
-        List(0..<28) { i in
+        List(number!.reversed()) { i in
             HStack {
-                Text(Date(), format: .dateTime.day().month().year())
+                Text(i.date, format: .dateTime.day().month().year())
                 Spacer()
-                Text(10000, format: .number.precision(.fractionLength(metric == .steps ? 0 : 2)))
+                Text(i.value, format: .number.precision(.fractionLength(metric == .steps ? 0 : 2)))
             }
         }
         .navigationTitle(metric.title)
@@ -63,6 +64,6 @@ struct HealthDataListView: View {
 
 #Preview {
     NavigationStack {
-        HealthDataListView(metric: .weight)
+        HealthDataListView(metric: .weight, number: HealthMetric.mockData)
     }
 }
