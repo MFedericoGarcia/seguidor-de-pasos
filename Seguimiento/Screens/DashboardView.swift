@@ -45,13 +45,16 @@ struct DashboardView: View {
                     }
                     .pickerStyle(.segmented)
                    
-                    //MARK: - Steps / Weight  Chart
+                    //MARK: - Steps / Weight  Charts
                     
-                    StepBarChart(chartData: hkManager.stepData, selectedStat: selectedStat)
-                    
-                    //MARK: - Average Chart
-                    
-                    StepPieChart(chartData: ChartMath.averageWeekdayCount(for: hkManager.stepData))
+                    switch selectedStat {
+                    case .steps:
+                        StepBarChart(chartData: hkManager.stepData, selectedStat: selectedStat)
+                        StepPieChart(chartData: ChartMath.averageWeekdayCount(for: hkManager.stepData))
+                        
+                    case .weight:
+                        WeightLineChart(selectedStat: selectedStat, chartData: hkManager.weightData)
+                    }
                     
                 //MARK: - Charts end
                     
@@ -64,6 +67,7 @@ struct DashboardView: View {
                 
                 .task {
                     await hkManager.fetchStepCount()
+                    await hkManager.fetchWeights()
                     isShowingPermissionPrimingSheet = !hasSeenPermissionPriming
                 }
                 .sheet(isPresented: $isShowingPermissionPrimingSheet, onDismiss: {
