@@ -55,6 +55,7 @@ struct StepPieChart: View {
 //                            .foregroundStyle(.white)
 //                        .fontWeight(.bold)
 //                    }
+                    
                 }
             }
             .chartAngleSelection(value: $rawSelectionChartValue.animation(.easeInOut))
@@ -89,5 +90,5 @@ struct StepPieChart: View {
 }
 
 #Preview {
-    StepPieChart(chartData: ChartMath.averageWeekdayCount(for: HealthMetric.mockData))
+    StepPieChart(chartData: ChartMath.averageWeekdayCount(for: MockData.steps))
 }

@@ -1,48 +1,40 @@
 //
-//  StepBarChart.swift
+//  WeightLineChart.swift
 //  Seguimiento
 //
-//  Created by Fede Garcia on 27/08/2024.
+//  Created by Fede Garcia on 31/08/2024.
 //
 
 import SwiftUI
 import Charts
 
-struct StepBarChart: View {
+struct WeightLineChart: View {
+    @State private var rawSelectedDate: Date?
     
-    //MARK: - Variables
-    
-     @State private var rawSelectedDate : Date?
-    
-     var chartData: [HealthMetric]
-     var selectedStat: HealthMetricContent
-    
-    var avgStepCount: Double {
-        guard !chartData.isEmpty  else { return 0 }
-        let totalSteps = chartData.reduce(0) { $0 + $1.value }
-        return totalSteps/Double(chartData.count)
-    }
+    var selectedStat: HealthMetricContent
+    var chartData: [HealthMetric]
     
     var selectedHealthMetric: HealthMetric? {
         guard let rawSelectedDate else { return nil }
-        return chartData.first {
-            Calendar.current.isDate(rawSelectedDate, inSameDayAs: $0.date)
+        return chartData.first { item in
+            Calendar.current.isDate(rawSelectedDate, inSameDayAs: item.date)
         }
     }
     
-    //MARK: - Body
-    
+    var minValue: Double  {
+        chartData.map { $0.value }.min() ?? 0
+    }
+
     var body: some View {
-        
         VStack {
             NavigationLink(value: selectedStat){
                 HStack {
                     VStack(alignment: .leading) {
-                        Label("Pasos", systemImage: "figure.walk")
+                        Label("Peso", systemImage: "figure")
                             .font(.title3.bold())
-                            .foregroundStyle(.teal)
+                            .foregroundStyle(.indigo)
                         
-                        Text("Promedio: \(Int(avgStepCount)) Pasos")
+                        Text("Promedio: \(Int(85)) Kgs")
                             .font(.caption)
                     }
                             
@@ -58,26 +50,37 @@ struct StepBarChart: View {
                     RuleMark(x: .value("Selected Metric", selectedHealthMetric.date, unit: .day))
                         .foregroundStyle(Color.secondary.opacity(0.3))
                         .offset(y: -5)
-                        .annotation(position: .top, spacing: 0, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) {
-                            annotationView
-                        }
+                        .annotation(position: .top, spacing: 0, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) { annotationView }
                 }
                 
-                
-                RuleMark(y: .value("Promedio", avgStepCount))
-                    .foregroundStyle(Color.secondary.opacity(0.8))
+                RuleMark(y: .value("Meta", 160))
+                    .foregroundStyle(.mint)
                     .lineStyle(.init(lineWidth: 1, dash: [5]))
+                    .annotation(alignment: .leading) {
+                        Text("Meta")
+                            .foregroundStyle(.mint)
+                            .font(.caption)
+                    }
                 
-                ForEach(chartData) { steps in
-                    BarMark(x: .value("Fecha", steps.date, unit: .day),
-                            y: .value("Pasos", steps.value)
-                    )
-                    .opacity(rawSelectedDate == nil || steps.date == selectedHealthMetric?.date ? 1.0 : 0.3)
-                    .foregroundStyle(Color.teal.gradient)
+                ForEach(chartData) { weights in
+                    
+                    AreaMark(x: .value("Día", weights.date, unit: .day),
+                             yStart: .value("Valor", weights.value),
+                             yEnd: .value("Min Valor", minValue))
+                    .foregroundStyle(Gradient(colors: [.indigo.opacity(0.5), .clear]))
+                    .interpolationMethod(.catmullRom)
+
+                    LineMark(x: .value("Día", weights.date, unit: .day),
+                             y: .value("Valor", weights.value))
+                    .foregroundStyle(.indigo)
+                    .interpolationMethod(.catmullRom)
+                    .symbol(.diamond)
                 }
+                
             }
             .frame(height: 150)
-            .chartXSelection(value: $rawSelectedDate.animation(.easeInOut))
+            .chartXSelection(value: $rawSelectedDate)
+            .chartYScale(domain: .automatic(includesZero: false))
             .chartXAxis{
                 AxisMarks {
                     AxisValueLabel(format: .dateTime.month(.defaultDigits).day())
@@ -87,14 +90,13 @@ struct StepBarChart: View {
                 AxisMarks { value in
                     AxisGridLine()
                         .foregroundStyle(Color.secondary.opacity(0.3))
-                    
-                    AxisValueLabel((value.as(Double.self) ?? 0 ).formatted(.number.notation(.compactName)))
+                    AxisValueLabel()
                 }
             }
+            
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
-        
     }
     
     //MARK: - Annotation View
@@ -105,9 +107,9 @@ struct StepBarChart: View {
                     .dateTime.weekday(.abbreviated).day().month(.abbreviated))
                     .font(.footnote.bold())
                     .foregroundStyle(.secondary)
-            Text(selectedHealthMetric?.value ?? 0, format: .number.precision(.fractionLength(2)))
+            Text(selectedHealthMetric?.value ?? 0, format: .number.precision(.fractionLength(1)))
                 .fontWeight(.heavy)
-                .foregroundStyle(.teal)
+                .foregroundStyle(.indigo)
         }
         .padding(12)
         .background(
@@ -115,10 +117,9 @@ struct StepBarChart: View {
             .fill(Color(.secondarySystemBackground))
             .shadow(color: .secondary.opacity(0.3), radius: 2, x: 2, y: 2))
     }
+
 }
 
-//MARK: -
-
 #Preview {
-    StepBarChart(chartData: MockData.steps , selectedStat: .steps)
+    WeightLineChart(selectedStat: .weight, chartData: MockData.weights)
 }

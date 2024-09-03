@@ -45,13 +45,27 @@ struct DashboardView: View {
                     }
                     .pickerStyle(.segmented)
                    
-                    //MARK: - Steps / Weight  Chart
+                    //MARK: - Steps / Weight  Charts
                     
-                    StepBarChart(chartData: hkManager.stepData, selectedStat: selectedStat)
+                    switch selectedStat {
+                    case .steps:
+                        StepBarChart(chartData: hkManager.stepData, selectedStat: selectedStat)
+                        StepPieChart(chartData: ChartMath.averageWeekdayCount(for: hkManager.stepData))
+                        
+                    case .weight:
+                        WeightLineChart(selectedStat: selectedStat, chartData: hkManager.weightData)
+                        WeightBarChart(chartData: ChartMath.averageDailyWeightDiffs(for: hkManager.weightDiffData))
+                    }
                     
-                    //MARK: - Average Chart
-                    
-                    StepPieChart(chartData: ChartMath.averageWeekdayCount(for: hkManager.stepData))
+//                    switch selectedStat {
+//                    case .steps:
+//                        StepBarChart(chartData: MockData.steps, selectedStat: selectedStat)
+//                        StepPieChart(chartData: ChartMath.averageWeekdayCount(for: MockData.steps))
+//                        
+//                    case .weight:
+//                        WeightLineChart(selectedStat: selectedStat, chartData: MockData.weights)
+//                        WeightBarChart(chartData: ChartMath.averageDailyWeightDiffs(for: MockData.weights))
+//                    }
                     
                 //MARK: - Charts end
                     
@@ -64,6 +78,8 @@ struct DashboardView: View {
                 
                 .task {
                     await hkManager.fetchStepCount()
+                    await hkManager.fetchWeights()
+                    await hkManager.fetchWeightsForDifferentials()
                     isShowingPermissionPrimingSheet = !hasSeenPermissionPriming
                 }
                 .sheet(isPresented: $isShowingPermissionPrimingSheet, onDismiss: {
