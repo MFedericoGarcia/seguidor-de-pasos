@@ -54,7 +54,7 @@ struct DashboardView: View {
                         
                     case .weight:
                         WeightLineChart(selectedStat: selectedStat, chartData: hkManager.weightData)
-                        WeightBarChart(chartData: ChartMath.averageDailyWeightDiffs(for: hkManager.weightData))
+                        WeightBarChart(chartData: ChartMath.averageDailyWeightDiffs(for: hkManager.weightDiffData))
                     }
                     
 //                    switch selectedStat {
@@ -79,6 +79,7 @@ struct DashboardView: View {
                 .task {
                     await hkManager.fetchStepCount()
                     await hkManager.fetchWeights()
+                    await hkManager.fetchWeightsForDifferentials()
                     isShowingPermissionPrimingSheet = !hasSeenPermissionPriming
                 }
                 .sheet(isPresented: $isShowingPermissionPrimingSheet, onDismiss: {
