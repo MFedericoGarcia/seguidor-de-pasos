@@ -55,13 +55,8 @@ struct ChartMath {
             let avgWeightDiff = total/Double(array.count)
             
             weekdayChartData.append(.init(date: firstValue.date, value: avgWeightDiff))
-        } 
-        
-        for data in weekdayChartData {
-            print("\(data.date.weekdayInt) -- \(data.value)")
         }
-        
-        return []
+        return weekdayChartData
     }
     
 }
