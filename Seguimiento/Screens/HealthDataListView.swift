@@ -8,14 +8,22 @@
 import SwiftUI
 
 struct HealthDataListView: View {
+    
+    @Environment(HealthKitManager.self) private var hkManager
+
+    
     var metric: HealthMetricContent
-    var number: [HealthMetric]?
+
+    var listData: [HealthMetric] {
+        metric == .steps ? hkManager.stepData : hkManager.weightData
+    }
+    
     @State var isShowingAddData: Bool = false
     @State var addDataDate: Date = .now
     @State var addValue: String = ""
     
     var body: some View {
-        List(number!.reversed()) { i in
+        List(listData.reversed()) { i in
             HStack {
                 Text(i.date, format: .dateTime.day().month().year())
                 Spacer()
@@ -28,7 +36,18 @@ struct HealthDataListView: View {
         }
         .toolbar{
             Button("Add Data", systemImage: "plus") {
-                isShowingAddData = true
+                Task {
+                    if metric == .steps {
+                       await hkManager.addStepData(for: addDataDate, value: Double(addValue)!)
+                        await hkManager.fetchStepCount()
+                        isShowingAddData = false
+                    } else {
+                      await hkManager.addWeightData(for: addDataDate, value: Double(addValue)!)
+                        await hkManager.fetchWeights()
+                        await hkManager.fetchWeightsForDifferentials()
+                        isShowingAddData = false
+                    }
+                }
             }
         }
     }
@@ -64,6 +83,7 @@ struct HealthDataListView: View {
 
 #Preview {
     NavigationStack {
-        HealthDataListView(metric: .weight, number: MockData.steps)
+        HealthDataListView(metric: .weight)
+            .environment(HealthKitManager())
     }
 }

@@ -73,7 +73,7 @@ struct DashboardView: View {
                 .padding()
                 .navigationTitle("Dashboard")
                 .navigationDestination(for: HealthMetricContent.self) { metric in
-                    HealthDataListView(metric: metric, number: hkManager.stepData)
+                    HealthDataListView(metric: metric)
                 }
                 
                 .task {

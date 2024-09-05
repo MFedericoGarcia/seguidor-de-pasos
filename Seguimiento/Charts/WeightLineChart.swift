@@ -34,7 +34,7 @@ struct WeightLineChart: View {
                             .font(.title3.bold())
                             .foregroundStyle(.indigo)
                         
-                        Text("Promedio: \(Int(85)) Kgs")
+                        Text("Promedio: \(Int(72)) Kgs")
                             .font(.caption)
                     }
                             
@@ -53,7 +53,7 @@ struct WeightLineChart: View {
                         .annotation(position: .top, spacing: 0, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) { annotationView }
                 }
                 
-                RuleMark(y: .value("Meta", 160))
+                RuleMark(y: .value("Meta", 72_000))
                     .foregroundStyle(.mint)
                     .lineStyle(.init(lineWidth: 1, dash: [5]))
                     .annotation(alignment: .leading) {
@@ -107,7 +107,10 @@ struct WeightLineChart: View {
                     .dateTime.weekday(.abbreviated).day().month(.abbreviated))
                     .font(.footnote.bold())
                     .foregroundStyle(.secondary)
-            Text(selectedHealthMetric?.value ?? 0, format: .number.precision(.fractionLength(1)))
+            HStack {
+                Text(((selectedHealthMetric?.value ?? 0) / 1000), format: .number.precision(.fractionLength(2)))
+                Text("Kg")
+            }
                 .fontWeight(.heavy)
                 .foregroundStyle(.indigo)
         }
