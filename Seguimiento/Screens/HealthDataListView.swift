@@ -21,7 +21,7 @@ struct HealthDataListView: View {
     @State var isShowingAddData: Bool = false
     @State var addDataDate: Date = .now
     @State var addValue: String = ""
-    
+        
     var body: some View {
         List(listData.reversed()) { i in
             HStack {
@@ -38,14 +38,26 @@ struct HealthDataListView: View {
             Button("Add Data", systemImage: "plus") {
                 Task {
                     if metric == .steps {
-                       await hkManager.addStepData(for: addDataDate, value: Double(addValue)!)
-                        await hkManager.fetchStepCount()
-                        isShowingAddData = false
+                        do {
+                            try await hkManager.addStepData(for: addDataDate, value: Double(addValue)!)
+                            try await hkManager.fetchStepCount()
+                            isShowingAddData = false
+                        } catch SegError.sharedDenied(let QuantityType) {
+                             print(QuantityType)
+                        } catch {
+                            
+                        }
                     } else {
-                      await hkManager.addWeightData(for: addDataDate, value: Double(addValue)!)
-                        await hkManager.fetchWeights()
-                        await hkManager.fetchWeightsForDifferentials()
-                        isShowingAddData = false
+                        do {
+                            try await hkManager.addWeightData(for: addDataDate, value: Double(addValue)!)
+                            try await hkManager.fetchWeights()
+                            try await hkManager.fetchWeightsForDifferentials()
+                            isShowingAddData = false
+                        } catch SegError.sharedDenied(let QuantityType) {
+                            print(QuantityType)
+                        } catch {
+                            
+                        }
                     }
                 }
             }
@@ -80,7 +92,7 @@ struct HealthDataListView: View {
         }
     }
 }
-
+ 
 #Preview {
     NavigationStack {
         HealthDataListView(metric: .weight)
