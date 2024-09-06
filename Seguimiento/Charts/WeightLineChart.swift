@@ -10,7 +10,8 @@ import Charts
 
 struct WeightLineChart: View {
     @State private var rawSelectedDate: Date?
-    
+    @State private var selectedDay: Date?
+
     var selectedStat: HealthMetricContent
     var chartData: [HealthMetric]
     
@@ -53,7 +54,7 @@ struct WeightLineChart: View {
                         .annotation(position: .top, spacing: 0, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) { annotationView }
                 }
                 
-                RuleMark(y: .value("Meta", 72_000))
+                RuleMark(y: .value("Meta", 165))
                     .foregroundStyle(.mint)
                     .lineStyle(.init(lineWidth: 1, dash: [5]))
                     .annotation(alignment: .leading) {
@@ -97,6 +98,12 @@ struct WeightLineChart: View {
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
+        .sensoryFeedback(.selection, trigger: selectedDay)
+        .onChange(of: rawSelectedDate) { oldValue, newValue in
+            if oldValue?.weekdayInt != newValue?.weekdayInt {
+                selectedDay = newValue
+            }
+        }
     }
     
     //MARK: - Annotation View
@@ -108,7 +115,7 @@ struct WeightLineChart: View {
                     .font(.footnote.bold())
                     .foregroundStyle(.secondary)
             HStack {
-                Text(((selectedHealthMetric?.value ?? 0) / 1000), format: .number.precision(.fractionLength(2)))
+                Text(((selectedHealthMetric?.value ?? 0)), format: .number.precision(.fractionLength(2)))
                 Text("Kg")
             }
                 .fontWeight(.heavy)

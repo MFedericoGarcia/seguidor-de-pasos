@@ -11,6 +11,8 @@ import Charts
 struct WeightBarChart: View {
     
     @State private var rawSelectedDate : Date?
+    @State private var selectedDay: Date?
+
     
     var chartData: [WeekdayChartData]
     
@@ -68,6 +70,12 @@ struct WeightBarChart: View {
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
+        .sensoryFeedback(.impact, trigger: selectedDay)
+        .onChange(of: rawSelectedDate) { oldValue, newValue in
+            if oldValue?.weekdayInt != newValue?.weekdayInt {
+                selectedDay = newValue
+            }
+        }
         
     }
     
