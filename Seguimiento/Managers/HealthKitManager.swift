@@ -9,11 +9,37 @@ import Foundation
 import HealthKit
 import Observation
 
-enum SegError: Error {
+enum SegError: LocalizedError {
     case authNotDetermined
     case sharedDenied(QuantityType: String)
     case noData
     case unableToCompleteRequest
+    
+    var errorDescription: String? {
+        switch self {
+        case .authNotDetermined:
+            "Se necesita acceso a datos de Salud"
+        case .sharedDenied(_ ):
+            "Sin permiso para escribir en memoria"
+        case .noData:
+            "Sin información"
+        case .unableToCompleteRequest:
+            "No se pudo completar la tarea"
+        }
+    }
+    
+    var failureReason: String {
+        switch self {
+        case .authNotDetermined:
+            "Sin permiso para acceder a Salud. Por favor ir a Configuración > Salud > Dispositivos y accesos a datos."
+        case .sharedDenied(let quantityType):
+            "La opción para escribir datos sobre \(quantityType) no está habilitada. \n\nPuedes cambiarla en Configuración > Salud > Dispositivos y accesos a datos."
+        case .noData:
+            "No hay datos en Salud."
+        case .unableToCompleteRequest:
+            "\nNo pudemos completar la tarea por el momento. \nPor favor intenta mas tarde o contactese con soporte."
+        }
+    }
 }
 
 

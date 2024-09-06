@@ -18,9 +18,11 @@ struct HealthDataListView: View {
         metric == .steps ? hkManager.stepData : hkManager.weightData
     }
     
-    @State var isShowingAddData: Bool = false
-    @State var addDataDate: Date = .now
-    @State var addValue: String = ""
+    @State private var isShowingAddData: Bool = false
+    @State private var addDataDate: Date = .now
+    @State private var addValue: String = ""
+    @State private var isShowingAlert: Bool = false
+    @State private var writeError: SegError = .noData
         
     var body: some View {
         List(listData.reversed()) { i in
@@ -34,6 +36,21 @@ struct HealthDataListView: View {
         .sheet(isPresented: $isShowingAddData){
             addDataView
         }
+        .alert(isPresented: $isShowingAlert, error: writeError) { writeError in
+            switch writeError {
+            case .authNotDetermined, .noData, .unableToCompleteRequest:
+                EmptyView()
+            case .sharedDenied(let quantityType):
+                Button("Configuración") {
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                }
+                Button("Cancelar", role: .cancel) {
+                    
+                }
+            }
+        } message: { writeError in
+            Text(writeError.failureReason)
+        }
         .toolbar{
             Button("Add Data", systemImage: "plus") {
                 Task {
@@ -42,10 +59,12 @@ struct HealthDataListView: View {
                             try await hkManager.addStepData(for: addDataDate, value: Double(addValue)!)
                             try await hkManager.fetchStepCount()
                             isShowingAddData = false
-                        } catch SegError.sharedDenied(let QuantityType) {
-                             print(QuantityType)
+                        } catch SegError.sharedDenied(let quantityType) {
+                            writeError = .sharedDenied(QuantityType: quantityType)
+                            isShowingAlert = true
                         } catch {
-                            
+                            writeError = .unableToCompleteRequest
+                            isShowingAlert = true
                         }
                     } else {
                         do {
@@ -53,10 +72,12 @@ struct HealthDataListView: View {
                             try await hkManager.fetchWeights()
                             try await hkManager.fetchWeightsForDifferentials()
                             isShowingAddData = false
-                        } catch SegError.sharedDenied(let QuantityType) {
-                            print(QuantityType)
+                        } catch SegError.sharedDenied(let quantityType) {
+                            writeError = .sharedDenied(QuantityType: quantityType)
+                            isShowingAlert = true
                         } catch {
-                            
+                            writeError = .unableToCompleteRequest
+                            isShowingAlert = true
                         }
                     }
                 }

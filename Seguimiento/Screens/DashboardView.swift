@@ -33,6 +33,8 @@ struct DashboardView: View {
     
     @State private var isShowingPermissionPrimingSheet = false
     @State private var selectedStat: HealthMetricContent = .steps
+    @State private var isShowingAlert: Bool = false
+    @State private var fetchError: SegError = .noData
     var isSteps: Bool { selectedStat == .steps }
     
     //MARK: - Body
@@ -87,9 +89,11 @@ struct DashboardView: View {
                     } catch SegError.authNotDetermined {
                         isShowingPermissionPrimingSheet = true
                     } catch SegError.noData {
-                        
+                        fetchError = .noData
+                        isShowingAlert = true
                     } catch {
-                        
+                        fetchError = .unableToCompleteRequest
+                        isShowingAlert = true
                     }
                 }
                 .sheet(isPresented: $isShowingPermissionPrimingSheet, onDismiss: {
@@ -97,6 +101,12 @@ struct DashboardView: View {
                 }, content: {
                     HealthKitPermissionPrimingView()
                 })
+                .alert(isPresented: $isShowingAlert, error: fetchError) { fetchError in
+                    //
+                } message: { fetchError in
+                    Text(fetchError.failureReason)
+                }
+
             }
         }
        .tint(isSteps ? .teal : .indigo)
