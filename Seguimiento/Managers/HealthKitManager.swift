@@ -11,9 +11,10 @@ import Observation
 
 enum SegError: LocalizedError {
     case authNotDetermined
-    case sharedDenied(QuantityType: String)
+    case sharedDenied(quantityType: String)
     case noData
     case unableToCompleteRequest
+    case invalidValue
     
     var errorDescription: String? {
         switch self {
@@ -25,6 +26,8 @@ enum SegError: LocalizedError {
             "Sin información"
         case .unableToCompleteRequest:
             "No se pudo completar la tarea"
+        case .invalidValue:
+            "Valor inválido"
         }
     }
     
@@ -38,6 +41,8 @@ enum SegError: LocalizedError {
             "No hay datos en Salud."
         case .unableToCompleteRequest:
             "\nNo pudemos completar la tarea por el momento. \nPor favor intenta mas tarde o contactese con soporte."
+        case .invalidValue:
+            "Debe ser un valor numérico con un maximo de un decimal."
         }
     }
 }
@@ -144,7 +149,7 @@ enum SegError: LocalizedError {
         case .notDetermined:
             throw SegError.authNotDetermined
         case .sharingDenied:
-            throw SegError.sharedDenied(QuantityType: "stepCount")
+            throw SegError.sharedDenied(quantityType: "stepCount")
         case .sharingAuthorized:
             break
         @unknown default:
@@ -168,7 +173,7 @@ enum SegError: LocalizedError {
         case .notDetermined:
             throw SegError.authNotDetermined
         case .sharingDenied:
-            throw SegError.sharedDenied(QuantityType: "bodyMass")
+            throw SegError.sharedDenied(quantityType: "bodyMass")
         case .sharingAuthorized:
             break
         @unknown default:
