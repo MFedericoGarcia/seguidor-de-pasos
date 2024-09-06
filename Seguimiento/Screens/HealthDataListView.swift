@@ -18,10 +18,12 @@ struct HealthDataListView: View {
         metric == .steps ? hkManager.stepData : hkManager.weightData
     }
     
-    @State var isShowingAddData: Bool = false
-    @State var addDataDate: Date = .now
-    @State var addValue: String = ""
-    
+    @State private var isShowingAddData: Bool = false
+    @State private var addDataDate: Date = .now
+    @State private var addValue: String = ""
+    @State private var isShowingAlert: Bool = false
+    @State private var writeError: SegError = .noData
+        
     var body: some View {
         List(listData.reversed()) { i in
             HStack {
@@ -36,18 +38,7 @@ struct HealthDataListView: View {
         }
         .toolbar{
             Button("Add Data", systemImage: "plus") {
-                Task {
-                    if metric == .steps {
-                       await hkManager.addStepData(for: addDataDate, value: Double(addValue)!)
-                        await hkManager.fetchStepCount()
-                        isShowingAddData = false
-                    } else {
-                      await hkManager.addWeightData(for: addDataDate, value: Double(addValue)!)
-                        await hkManager.fetchWeights()
-                        await hkManager.fetchWeightsForDifferentials()
-                        isShowingAddData = false
-                    }
-                }
+                isShowingAddData = true
             }
         }
     }
@@ -61,14 +52,63 @@ struct HealthDataListView: View {
                     Spacer()
                     TextField("Valor", text: $addValue)
                         .multilineTextAlignment(.trailing)
+                        .frame(width: 140)
                         .keyboardType(metric == .steps ? .numberPad : .decimalPad)
                 }
             }
             .navigationTitle(metric.title)
+            .alert(isPresented: $isShowingAlert, error: writeError) { writeError in
+                switch writeError {
+                case .authNotDetermined, .noData, .unableToCompleteRequest, .invalidValue:
+                    EmptyView()
+                case .sharedDenied(_ ):
+                    Button("Configuración") {
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                    }
+                    Button("Cancelar", role: .cancel) {
+                        
+                    }
+                }
+            } message: { writeError in
+                Text(writeError.failureReason)
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Agregar") {
-                        // code later
+                        guard let value = Double(addValue) else {
+                            writeError = .invalidValue
+                            isShowingAlert = true
+                            addValue = ""
+                            return
+                        }
+                        Task {
+                            if metric == .steps {
+                                do {
+                                    try await hkManager.addStepData(for: addDataDate, value: value)
+                                    try await hkManager.fetchStepCount()
+                                    isShowingAddData = false
+                                } catch SegError.sharedDenied(let quantityType) {
+                                    writeError = .sharedDenied(quantityType: quantityType)
+                                    isShowingAlert = true
+                                } catch {
+                                    writeError = .unableToCompleteRequest
+                                    isShowingAlert = true
+                                }
+                            } else {
+                                do {
+                                    try await hkManager.addWeightData(for: addDataDate, value: value )
+                                    try await hkManager.fetchWeights()
+                                    try await hkManager.fetchWeightsForDifferentials()
+                                    isShowingAddData = false
+                                } catch SegError.sharedDenied(let quantityType) {
+                                    writeError = .sharedDenied(quantityType: quantityType)
+                                    isShowingAlert = true
+                                } catch {
+                                    writeError = .unableToCompleteRequest
+                                    isShowingAlert = true
+                                }
+                            }
+                        }
                     }
                 }
                 ToolbarItem(placement: .topBarLeading) {
@@ -80,7 +120,7 @@ struct HealthDataListView: View {
         }
     }
 }
-
+ 
 #Preview {
     NavigationStack {
         HealthDataListView(metric: .weight)

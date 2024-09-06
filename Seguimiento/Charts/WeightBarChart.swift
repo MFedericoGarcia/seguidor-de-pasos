@@ -11,6 +11,8 @@ import Charts
 struct WeightBarChart: View {
     
     @State private var rawSelectedDate : Date?
+    @State private var selectedDay: Date?
+
     
     var chartData: [WeekdayChartData]
     
@@ -36,38 +38,47 @@ struct WeightBarChart: View {
                 }
                 .padding(.bottom, 12)
               
-            Chart {
-                
-                if rawSelectedDate != nil {
-                    RuleMark(x: .value("Selected Metric", rawSelectedDate!, unit: .weekday))
-                        .foregroundStyle(Color.secondary.opacity(0.3))
-                        .offset(y: -5)
-                        .annotation(position: .top, spacing: 0, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) {
-                            annotationView.frame(width: 100)
-                        }
-                }
-                
-                ForEach(chartData){ weekday in
-                    BarMark(x: .value("Day", weekday.date, unit: .weekday),
-                            y: .value("dif", weekday.value),
-                            width: .fixed(30))
-                    .opacity(rawSelectedDate == nil || weekday.date == selectedWeekday?.date ? 1.0 : 0.3)
+            if chartData.isEmpty {
+                ChartEmptyView(systemImageName: "chart.bar", title: "Sin Datos", description: "No hay datos sobre peso en la APP Salud.")
+            } else {
+                Chart {
+                    
+                    if rawSelectedDate != nil {
+                        RuleMark(x: .value("Selected Metric", rawSelectedDate!, unit: .weekday))
+                            .foregroundStyle(Color.secondary.opacity(0.3))
+                            .offset(y: -5)
+                            .annotation(position: .top, spacing: 0, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) {
+                                annotationView.frame(width: 100)
+                            }
+                    }
+                    
+                    ForEach(chartData){ weekday in
+                        BarMark(x: .value("Day", weekday.date, unit: .weekday),
+                                y: .value("dif", weekday.value),
+                                width: .fixed(30))
+                        .opacity(rawSelectedDate == nil || weekday.date == selectedWeekday?.date ? 1.0 : 0.3)
 
-                    .foregroundStyle(weekday.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
+                        .foregroundStyle(weekday.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
+                    }
+                    
                 }
-                
-            }
-            .frame(height: 150)
-            .chartXSelection(value: $rawSelectedDate.animation(.easeInOut))
-            .chartXAxis{
-                AxisMarks(values: .stride(by: .day)) {
-                    AxisValueLabel(format: .dateTime.weekday(), centered: true)
+                .frame(height: 150)
+                .chartXSelection(value: $rawSelectedDate.animation(.easeInOut))
+                .chartXAxis{
+                    AxisMarks(values: .stride(by: .day)) {
+                        AxisValueLabel(format: .dateTime.weekday(), centered: true)
+                    }
                 }
-                
             }
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
+        .sensoryFeedback(.impact, trigger: selectedDay)
+        .onChange(of: rawSelectedDate) { oldValue, newValue in
+            if oldValue?.weekdayInt != newValue?.weekdayInt {
+                selectedDay = newValue
+            }
+        }
         
     }
     
