@@ -25,6 +25,7 @@
 		B7F3CDE42C86C7C0006F2270 /* WeightBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F3CDE32C86C7C0006F2270 /* WeightBarChart.swift */; };
 		B7F648C02C6FF92900C07B8C /* HealthKitPermissionPrimingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F648BF2C6FF92900C07B8C /* HealthKitPermissionPrimingView.swift */; };
 		B7F648C32C70019700C07B8C /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F648C22C70019700C07B8C /* HealthKitManager.swift */; };
+		B7FAA6CF2C8CC48C0001592E /* ChartContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FAA6CE2C8CC48C0001592E /* ChartContainer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		B7F648BF2C6FF92900C07B8C /* HealthKitPermissionPrimingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPermissionPrimingView.swift; sourceTree = "<group>"; };
 		B7F648C12C6FFF4000C07B8C /* Seguimiento.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Seguimiento.entitlements; sourceTree = "<group>"; };
 		B7F648C22C70019700C07B8C /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		B7FAA6CE2C8CC48C0001592E /* ChartContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartContainer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				B71135392C83B6E20030266A /* WeightLineChart.swift */,
 				B7F3CDE32C86C7C0006F2270 /* WeightBarChart.swift */,
 				B7EA937F2C8B953000F3004A /* ChartEmptyView.swift */,
+				B7FAA6CE2C8CC48C0001592E /* ChartContainer.swift */,
 			);
 			path = Charts;
 			sourceTree = "<group>";
@@ -238,6 +241,7 @@
 				B7464D182C6D67260090E206 /* DashboardView.swift in Sources */,
 				B7F3CDE42C86C7C0006F2270 /* WeightBarChart.swift in Sources */,
 				B7243CA22C7E54A200EDCBEB /* StepBarChart.swift in Sources */,
+				B7FAA6CF2C8CC48C0001592E /* ChartContainer.swift in Sources */,
 				B711353D2C83B8D00030266A /* MockData.swift in Sources */,
 				B7EA93802C8B953000F3004A /* ChartEmptyView.swift in Sources */,
 				B7464D162C6D67260090E206 /* SeguimientoApp.swift in Sources */,

@@ -35,28 +35,19 @@ struct StepBarChart: View {
     
     var body: some View {
         
-        VStack {
-            NavigationLink(value: selectedStat){
-                HStack {
-                    VStack(alignment: .leading) {
-                        Label("Pasos", systemImage: "figure.walk")
-                            .font(.title3.bold())
-                            .foregroundStyle(.teal)
-                        
-                        Text("Promedio: \(Int(avgStepCount)) Pasos")
-                            .font(.caption)
-                    }
-                            
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                }
-            }
-            .foregroundStyle(.secondary)
-            .padding(.bottom, 12)
+        //MARK: - Container and Title
+        
+        ChartContainer(title: "Pasos", symbol: "figure.walk", subtitle: "Promedio: \(Int(avgStepCount)) Pasos", context: .steps, isNav: true) {
             
+            //MARK: - Empty View
+
             if chartData.isEmpty {
-               ChartEmptyView(systemImageName: "chart.bar", title: "Sin Datos", description: "No hay datos sobre pasos en la APP Salud.")
+                ChartEmptyView(systemImageName: "chart.bar", title: "Sin Datos", description: "No hay datos sobre pasos en la APP Salud.")
+                
             } else {
+                
+                // MARK: - Chart
+                
                 Chart {
                     if let selectedHealthMetric {
                         RuleMark(x: .value("Selected Metric", selectedHealthMetric.date, unit: .day))
@@ -66,8 +57,6 @@ struct StepBarChart: View {
                                 annotationView
                             }
                     }
-                    
-                    
                     RuleMark(y: .value("Promedio", avgStepCount))
                         .foregroundStyle(Color.secondary.opacity(0.8))
                         .lineStyle(.init(lineWidth: 1, dash: [5]))
@@ -96,10 +85,7 @@ struct StepBarChart: View {
                     }
                 }
             }
-           
         }
-        .padding()
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
         .sensoryFeedback(.selection, trigger: selectedDay)
         .onChange(of: rawSelectedDate) { oldValue, newValue in
             if oldValue?.weekdayInt != newValue?.weekdayInt {
@@ -114,21 +100,21 @@ struct StepBarChart: View {
         VStack(alignment: .leading) {
             Text(selectedHealthMetric?.date ?? .now, format:
                     .dateTime.weekday(.abbreviated).day().month(.abbreviated))
-                    .font(.footnote.bold())
-                    .foregroundStyle(.secondary)
+            .font(.footnote.bold())
+            .foregroundStyle(.secondary)
             Text(selectedHealthMetric?.value ?? 0, format: .number.precision(.fractionLength(2)))
                 .fontWeight(.heavy)
                 .foregroundStyle(.teal)
         }
         .padding(12)
         .background(
-        RoundedRectangle(cornerRadius: 4)
-            .fill(Color(.secondarySystemBackground))
-            .shadow(color: .secondary.opacity(0.3), radius: 2, x: 2, y: 2))
+            RoundedRectangle(cornerRadius: 4)
+                .fill(Color(.secondarySystemBackground))
+                .shadow(color: .secondary.opacity(0.3), radius: 2, x: 2, y: 2))
     }
 }
 
-//MARK: -
+    //MARK: -
 
 #Preview {
     StepBarChart(chartData: MockData.steps , selectedStat: .steps)

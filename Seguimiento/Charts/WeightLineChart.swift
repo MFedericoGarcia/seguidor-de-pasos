@@ -27,28 +27,19 @@ struct WeightLineChart: View {
     }
 
     var body: some View {
-        VStack {
-            NavigationLink(value: selectedStat){
-                HStack {
-                    VStack(alignment: .leading) {
-                        Label("Peso", systemImage: "figure")
-                            .font(.title3.bold())
-                            .foregroundStyle(.indigo)
-                        
-                        Text("Promedio: \(Int(72)) Kgs")
-                            .font(.caption)
-                    }
-                            
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                }
-            }
-            .foregroundStyle(.secondary)
-            .padding(.bottom, 12)
+        
+        //MARK: - Container and Title
+        
+        ChartContainer(title: "Peso", symbol: "figure", subtitle: "Promedio: \(Int(72)) Kgs", context: .weight, isNav: true) {
             
+            //MARK: - Empty View
+
             if chartData.isEmpty {
                 ChartEmptyView(systemImageName: "chart.xyaxis.line", title: "Sin Datos", description: "No hay datos sobre peso en la APP Salud.")
             } else {
+                
+                //MARK: - Chart
+
                 Chart {
                     if let selectedHealthMetric {
                         RuleMark(x: .value("Selected Metric", selectedHealthMetric.date, unit: .day))
@@ -99,8 +90,6 @@ struct WeightLineChart: View {
                 }
             }
         }
-        .padding()
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
         .sensoryFeedback(.selection, trigger: selectedDay)
         .onChange(of: rawSelectedDate) { oldValue, newValue in
             if oldValue?.weekdayInt != newValue?.weekdayInt {

@@ -27,21 +27,18 @@ struct StepPieChart: View {
     
     var body: some View {
         
-        VStack(alignment: .leading) {
-                VStack(alignment: .leading) {
-                    Label("Promedio", systemImage: "calendar")
-                        .font(.title3.bold())
-                        .foregroundStyle(.teal)
-                    
-                    Text("Últimos 28 Días")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.bottom, 12)
-              
+        //MARK: - Container and Title
+
+        ChartContainer(title: "Promedio", symbol: "calendar", subtitle: "Últimos 28 Días", context: .steps, isNav: false) {
+            
+            //MARK: - Empty View
+
             if chartData.isEmpty {
                 ChartEmptyView(systemImageName: "chart.pie", title: "Sin Datos", description: "No hay datos sobre pasos en la APP Salud.")
             } else {
+
+                //MARK: - Chart
+
                 Chart {
                     ForEach(chartData){ weekday in
                         SectorMark(angle: .value("Pasos Promedio", weekday.value),
@@ -87,8 +84,6 @@ struct StepPieChart: View {
                 }
             }
         }
-        .padding()
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
         .sensoryFeedback(.impact, trigger: selectedDay)
         .onChange(of: selectedWeekday) { oldValue, newValue in
             guard let oldValue, let newValue else { return }

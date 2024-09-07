@@ -26,21 +26,18 @@ struct WeightBarChart: View {
     
     var body: some View {
         
-        VStack(alignment: .leading) {
-                VStack(alignment: .leading) {
-                    Label("Promedios de cambio de peso", systemImage: "figure")
-                        .font(.title3.bold())
-                        .foregroundStyle(.indigo)
-                    
-                    Text("Por día (Últimos 28 Días)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.bottom, 12)
+        //MARK: - Container and Title
+        
+        ChartContainer(title: "Promedios de cambio de peso", symbol: "figure", subtitle: "Por día (Últimos 28 Días)", context: .weight, isNav: false) {
+            
+            //MARK: - Empty View
               
             if chartData.isEmpty {
                 ChartEmptyView(systemImageName: "chart.bar", title: "Sin Datos", description: "No hay datos sobre peso en la APP Salud.")
             } else {
+                
+                //MARK: - Chart
+                
                 Chart {
                     
                     if rawSelectedDate != nil {
@@ -71,8 +68,6 @@ struct WeightBarChart: View {
                 }
             }
         }
-        .padding()
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
         .sensoryFeedback(.impact, trigger: selectedDay)
         .onChange(of: rawSelectedDate) { oldValue, newValue in
             if oldValue?.weekdayInt != newValue?.weekdayInt {
@@ -92,7 +87,7 @@ struct WeightBarChart: View {
                     .foregroundStyle(.secondary)
             Text("\(selectedWeekday!.value > 0 ? "+" : "") \(selectedWeekday?.value ?? 0, format: .number.precision(.fractionLength(2)))")
                 .fontWeight(.heavy)
-                .foregroundStyle(selectedWeekday!.value > 0 ? Color.indigo.gradient : Color.teal.gradient)
+                .foregroundStyle(selectedWeekday!.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
         }
         .padding(12)
         .background(
