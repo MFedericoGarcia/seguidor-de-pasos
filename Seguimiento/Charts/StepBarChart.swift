@@ -15,20 +15,10 @@ struct StepBarChart: View {
     @State private var rawSelectedDate : Date?
     @State private var selectedDay: Date?
     
-    var chartData: [HealthMetric]
-    var selectedStat: HealthMetricContent
+    var chartData: [DateValueChartData]
     
-    var avgStepCount: Double {
-        guard !chartData.isEmpty  else { return 0 }
-        let totalSteps = chartData.reduce(0) { $0 + $1.value }
-        return totalSteps/Double(chartData.count)
-    }
-    
-    var selectedHealthMetric: HealthMetric? {
-        guard let rawSelectedDate else { return nil }
-        return chartData.first {
-            Calendar.current.isDate(rawSelectedDate, inSameDayAs: $0.date)
-        }
+    var selectedHealthMetric: DateValueChartData? {
+        ChartHelper.parseSelectedData(for: chartData, in: rawSelectedDate)
     }
     
     //MARK: - Body
@@ -37,10 +27,10 @@ struct StepBarChart: View {
         
         //MARK: - Container and Title
         
-        ChartContainer(title: "Pasos", symbol: "figure.walk", subtitle: "Promedio: \(Int(avgStepCount)) Pasos", context: .steps, isNav: true) {
+        ChartContainer(title: "Pasos", symbol: "figure.walk", subtitle: "Promedio: \(Int(ChartHelper.averageValue(for: chartData))) Pasos", context: .steps, isNav: true) {
             
             //MARK: - Empty View
-
+            
             if chartData.isEmpty {
                 ChartEmptyView(systemImageName: "chart.bar", title: "Sin Datos", description: "No hay datos sobre pasos en la APP Salud.")
                 
@@ -54,10 +44,10 @@ struct StepBarChart: View {
                             .foregroundStyle(Color.secondary.opacity(0.3))
                             .offset(y: -5)
                             .annotation(position: .top, spacing: 0, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) {
-                                annotationView
+                                ChartAnnotationView(data: selectedHealthMetric, context: .steps)
                             }
                     }
-                    RuleMark(y: .value("Promedio", avgStepCount))
+                    RuleMark(y: .value("Promedio", ChartHelper.averageValue(for: chartData)))
                         .foregroundStyle(Color.secondary.opacity(0.8))
                         .lineStyle(.init(lineWidth: 1, dash: [5]))
                     
@@ -93,29 +83,10 @@ struct StepBarChart: View {
             }
         }
     }
-    
-    //MARK: - Annotation View
-    
-    var annotationView: some View {
-        VStack(alignment: .leading) {
-            Text(selectedHealthMetric?.date ?? .now, format:
-                    .dateTime.weekday(.abbreviated).day().month(.abbreviated))
-            .font(.footnote.bold())
-            .foregroundStyle(.secondary)
-            Text(selectedHealthMetric?.value ?? 0, format: .number.precision(.fractionLength(2)))
-                .fontWeight(.heavy)
-                .foregroundStyle(.teal)
-        }
-        .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: 4)
-                .fill(Color(.secondarySystemBackground))
-                .shadow(color: .secondary.opacity(0.3), radius: 2, x: 2, y: 2))
-    }
 }
 
     //MARK: -
 
 #Preview {
-    StepBarChart(chartData: MockData.steps , selectedStat: .steps)
+    StepBarChart(chartData: ChartHelper.convert(data: MockData.steps))
 }

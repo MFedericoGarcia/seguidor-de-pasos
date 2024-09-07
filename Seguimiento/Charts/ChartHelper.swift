@@ -1,0 +1,29 @@
+//
+//  ChartHelper.swift
+//  Seguimiento
+//
+//  Created by Fede Garcia on 07/09/2024.
+//
+
+import Foundation
+
+struct ChartHelper {
+    
+    static func convert(data: [HealthMetric]) -> [DateValueChartData] {
+        data.map { .init(date: $0.date, value: $0.value)}
+    }
+    
+    static func averageValue( for data: [DateValueChartData] ) -> Double {
+        guard !data.isEmpty  else { return 0 }
+        let totalSteps = data.reduce(0) { $0 + $1.value }
+        return totalSteps/Double(data.count)
+    }
+    
+    static func parseSelectedData( for data: [DateValueChartData],in selectedDate: Date?) -> DateValueChartData? {
+        guard let selectedDate else { return nil }
+        return data.first {
+            Calendar.current.isDate(selectedDate, inSameDayAs: $0.date)
+        }
+    }
+    
+}

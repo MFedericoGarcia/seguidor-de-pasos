@@ -13,16 +13,11 @@ struct WeightBarChart: View {
     @State private var rawSelectedDate : Date?
     @State private var selectedDay: Date?
 
+    var chartData: [DateValueChartData]
     
-    var chartData: [WeekdayChartData]
-    
-    var selectedWeekday: WeekdayChartData? {
-        guard let rawSelectedDate else { return nil }
-        return chartData.first {
-            Calendar.current.isDate(rawSelectedDate, inSameDayAs: $0.date)
-        }
+    var selectedHealthMetric: DateValueChartData? {
+        ChartHelper.parseSelectedData(for: chartData, in: rawSelectedDate)
     }
-    
     
     var body: some View {
         
@@ -53,7 +48,7 @@ struct WeightBarChart: View {
                         BarMark(x: .value("Day", weekday.date, unit: .weekday),
                                 y: .value("dif", weekday.value),
                                 width: .fixed(30))
-                        .opacity(rawSelectedDate == nil || weekday.date == selectedWeekday?.date ? 1.0 : 0.3)
+                        .opacity(rawSelectedDate == nil || weekday.date == selectedHealthMetric?.date ? 1.0 : 0.3)
 
                         .foregroundStyle(weekday.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
                     }
@@ -85,9 +80,9 @@ struct WeightBarChart: View {
                     .dateTime.weekday(.wide))
                     .font(.footnote.bold())
                     .foregroundStyle(.secondary)
-            Text("\(selectedWeekday!.value > 0 ? "+" : "") \(selectedWeekday?.value ?? 0, format: .number.precision(.fractionLength(2)))")
+            Text("\(selectedHealthMetric!.value > 0 ? "+" : "") \(selectedHealthMetric?.value ?? 0, format: .number.precision(.fractionLength(2)))")
                 .fontWeight(.heavy)
-                .foregroundStyle(selectedWeekday!.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
+                .foregroundStyle(selectedHealthMetric!.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
         }
         .padding(12)
         .background(
