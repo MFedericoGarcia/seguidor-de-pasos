@@ -10,7 +10,7 @@ import Algorithms
 
 struct ChartMath {
     
-   static func averageWeekdayCount(for metric: [HealthMetric]) -> [WeekdayChartData] {
+   static func averageWeekdayCount(for metric: [HealthMetric]) -> [DateValueChartData] {
        
        /// agrupa los resultados por dia, 1 domingo, 2 lunes ....
        let sortedByWeekday = metric.sorted { $0.date.weekdayInt < $1.date.weekdayInt }
@@ -18,7 +18,7 @@ struct ChartMath {
        /// cuando cuambia de dia (chunked) lo detecta y crea un nuevo array para cada cambio
        let weekdayArray = sortedByWeekday.chunked { $0.date.weekdayInt == $1.date.weekdayInt }
        
-       var weekdayChartData: [WeekdayChartData] = []
+       var weekdayChartData: [DateValueChartData] = []
        
        for array in weekdayArray {
            guard let firstValue = array.first else { continue }
@@ -31,7 +31,7 @@ struct ChartMath {
         return weekdayChartData
     }
     
-    static func averageDailyWeightDiffs(for weights: [HealthMetric]) -> [WeekdayChartData] {
+    static func averageDailyWeightDiffs(for weights: [HealthMetric]) -> [DateValueChartData] {
         
         var diffValues: [(date: Date, value: Double)] = []
         
@@ -49,7 +49,7 @@ struct ChartMath {
         /// cuando cuambia de dia (chunked) lo detecta y crea un nuevo array para cada cambio
         let weekdayArray = sortedByWeekday.chunked { $0.date.weekdayInt == $1.date.weekdayInt }
         
-        var weekdayChartData:[WeekdayChartData] = []
+        var weekdayChartData:[DateValueChartData] = []
         
         for array in weekdayArray {
             guard let firstValue = array.first else { continue }
