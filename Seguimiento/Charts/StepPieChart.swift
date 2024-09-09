@@ -27,10 +27,15 @@ struct StepPieChart: View {
     
     var body: some View {
         
-        //MARK: - Container and Title
+        //MARK: - Container Configuration
 
-        ChartContainer(title: "Promedio", symbol: "calendar", subtitle: "Últimos 28 Días", context: .steps, isNav: false) {
-            
+        let config = ChartContainerConfiguration(title: "Promedio", symbol: "calendar", subtitle: "Últimos 28 Días", context: .steps, isNav: false)
+        
+        //MARK: - Container start
+
+        
+        ChartContainer(config: config) {
+                    
             //MARK: - Empty View
 
             if chartData.isEmpty {

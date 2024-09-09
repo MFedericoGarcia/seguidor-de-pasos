@@ -24,9 +24,13 @@ struct WeightLineChart: View {
 
     var body: some View {
         
-        //MARK: - Container and Title
+        //MARK: - Container Configuration
+
+        let config = ChartContainerConfiguration(title: "Peso", symbol: "figure", subtitle: "Promedio: \(Int(165))", context: .weight, isNav: true)
         
-        ChartContainer(title: "Peso", symbol: "figure", subtitle: "Promedio: \(Int(165))", context: .weight, isNav: true) {
+        //MARK: - Container start
+
+        ChartContainer(config: config) {
             
             //MARK: - Empty View
 
@@ -38,10 +42,7 @@ struct WeightLineChart: View {
 
                 Chart {
                     if let selectedHealthMetric {
-                        RuleMark(x: .value("Selected Metric", selectedHealthMetric.date, unit: .day))
-                            .foregroundStyle(Color.secondary.opacity(0.3))
-                            .offset(y: -5)
-                            .annotation(position: .top, spacing: 0, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) { ChartAnnotationView(data: selectedHealthMetric, context: .weight) }
+                        ChartAnnotationView(data: selectedHealthMetric, context: .weight)
                     }
                     
                     RuleMark(y: .value("Meta", 165))

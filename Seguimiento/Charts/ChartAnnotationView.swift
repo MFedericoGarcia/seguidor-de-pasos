@@ -6,13 +6,21 @@
 //
 
 import SwiftUI
+import Charts
 
-struct ChartAnnotationView: View {
+struct ChartAnnotationView: ChartContent {
     
     let data: DateValueChartData
     let context: HealthMetricContent
     
-    var body: some View {
+    var body: some ChartContent {
+        RuleMark(x: .value("Selected Metric", data.date, unit: .day))
+            .foregroundStyle(Color.secondary.opacity(0.3))
+            .offset(y: -5)
+            .annotation(position: .top, spacing: 0, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) { annotationView }
+    }
+    
+    var annotationView: some View {
         VStack(alignment: .leading) {
             Text(data.date, format:
                     .dateTime.weekday(.abbreviated).day().month(.abbreviated))
@@ -30,8 +38,4 @@ struct ChartAnnotationView: View {
         .frame(width: 100)
     }
     
-}
-
-#Preview {
-    ChartAnnotationView(data: .init(date: .now, value: 1000), context: .weight)
 }

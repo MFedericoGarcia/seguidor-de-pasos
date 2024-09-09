@@ -15,16 +15,20 @@ struct WeightBarChart: View {
 
     var chartData: [DateValueChartData]
     
-    var selectedHealthMetric: DateValueChartData? {
+    var selectedData: DateValueChartData? {
         ChartHelper.parseSelectedData(for: chartData, in: rawSelectedDate)
     }
     
     var body: some View {
         
-        //MARK: - Container and Title
+        //MARK: - Container Configuration
         
-        ChartContainer(title: "Promedios de cambio de peso", symbol: "figure", subtitle: "Por día (Últimos 28 Días)", context: .weight, isNav: false) {
-            
+        let config = ChartContainerConfiguration(title: "Promedios de cambio de peso", symbol: "figure", subtitle: "Por día (Últimos 28 Días)", context: .weight, isNav: false)
+        
+        //MARK: - Container start
+
+        ChartContainer(config: config) {
+                    
             //MARK: - Empty View
               
             if chartData.isEmpty {
@@ -48,7 +52,7 @@ struct WeightBarChart: View {
                         BarMark(x: .value("Day", weekday.date, unit: .weekday),
                                 y: .value("dif", weekday.value),
                                 width: .fixed(30))
-                        .opacity(rawSelectedDate == nil || weekday.date == selectedHealthMetric?.date ? 1.0 : 0.3)
+                        .opacity(selectedData?.date == nil || weekday.date == selectedData?.date ? 1.0 : 0.3)
 
                         .foregroundStyle(weekday.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
                     }
@@ -80,9 +84,9 @@ struct WeightBarChart: View {
                     .dateTime.weekday(.wide))
                     .font(.footnote.bold())
                     .foregroundStyle(.secondary)
-            Text("\(selectedHealthMetric!.value > 0 ? "+" : "") \(selectedHealthMetric?.value ?? 0, format: .number.precision(.fractionLength(2)))")
+            Text("\(selectedData!.value > 0 ? "+" : "") \(selectedData?.value ?? 0, format: .number.precision(.fractionLength(2)))")
                 .fontWeight(.heavy)
-                .foregroundStyle(selectedHealthMetric!.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
+                .foregroundStyle(selectedData!.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
         }
         .padding(12)
         .background(
