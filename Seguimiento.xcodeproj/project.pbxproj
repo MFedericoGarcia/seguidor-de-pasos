@@ -102,16 +102,9 @@
 		B7243CA52C7E57EE00EDCBEB /* Charts */ = {
 			isa = PBXGroup;
 			children = (
-				B7243CA12C7E54A200EDCBEB /* StepBarChart.swift */,
-				B71A83152C827A63005BD6D6 /* StepPieChart.swift */,
-				B71135392C83B6E20030266A /* WeightLineChart.swift */,
-				B7F3CDE32C86C7C0006F2270 /* WeightBarChart.swift */,
-				B7243CA72C7E67DB00EDCBEB /* ChartMath.swift */,
-				B7243CA92C7E6BBD00EDCBEB /* ChartDataTypes.swift */,
-				B7EA937F2C8B953000F3004A /* ChartEmptyView.swift */,
-				B7FAA6CE2C8CC48C0001592E /* ChartContainer.swift */,
-				B7FAA6D02C8CDBFB0001592E /* ChartHelper.swift */,
-				B7FAA6D22C8CDD020001592E /* ChartAnnotationView.swift */,
+				B776675D2C90BC2800BB8691 /* ChartViews */,
+				B776675F2C90BC8C00BB8691 /* ChartCustom */,
+				B776675E2C90BC3E00BB8691 /* ChartUtilities */,
 			);
 			path = Charts;
 			sourceTree = "<group>";
@@ -152,9 +145,9 @@
 		B7464D142C6D67260090E206 /* Seguimiento */ = {
 			isa = PBXGroup;
 			children = (
-				B711353B2C83B8B20030266A /* Utilities */,
 				B7F648C12C6FFF4000C07B8C /* Seguimiento.entitlements */,
 				B7464D152C6D67260090E206 /* SeguimientoApp.swift */,
+				B711353B2C83B8B20030266A /* Utilities */,
 				B7243CA32C7E57BC00EDCBEB /* Model */,
 				B7243CA62C7E57FA00EDCBEB /* Managers */,
 				B7243CA52C7E57EE00EDCBEB /* Charts */,
@@ -171,6 +164,37 @@
 				B7464D1C2C6D672B0090E206 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		B776675D2C90BC2800BB8691 /* ChartViews */ = {
+			isa = PBXGroup;
+			children = (
+				B7243CA12C7E54A200EDCBEB /* StepBarChart.swift */,
+				B71A83152C827A63005BD6D6 /* StepPieChart.swift */,
+				B71135392C83B6E20030266A /* WeightLineChart.swift */,
+				B7F3CDE32C86C7C0006F2270 /* WeightBarChart.swift */,
+			);
+			path = ChartViews;
+			sourceTree = "<group>";
+		};
+		B776675E2C90BC3E00BB8691 /* ChartUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				B7243CA72C7E67DB00EDCBEB /* ChartMath.swift */,
+				B7243CA92C7E6BBD00EDCBEB /* ChartDataTypes.swift */,
+				B7FAA6D02C8CDBFB0001592E /* ChartHelper.swift */,
+			);
+			path = ChartUtilities;
+			sourceTree = "<group>";
+		};
+		B776675F2C90BC8C00BB8691 /* ChartCustom */ = {
+			isa = PBXGroup;
+			children = (
+				B7EA937F2C8B953000F3004A /* ChartEmptyView.swift */,
+				B7FAA6CE2C8CC48C0001592E /* ChartContainer.swift */,
+				B7FAA6D22C8CDD020001592E /* ChartAnnotationView.swift */,
+			);
+			path = ChartCustom;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
