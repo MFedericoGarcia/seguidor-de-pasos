@@ -21,34 +21,37 @@ struct StepBarChart: View {
         ChartHelper.parseSelectedData(for: chartData, in: rawSelectedDate)
     }
     
+    var averageSteps: Int {
+        Int(chartData.map { $0.value }.average)
+    }
+    
     //MARK: - Body
     
     var body: some View {
         
         //MARK: - Container Configuration
 
-        let config = ChartContainerConfiguration(title: "Pasos", symbol: "figure.walk", subtitle: "Promedio: \(Int(ChartHelper.averageValue(for: chartData))) Pasos", context: .steps, isNav: true)
+        let config = ChartContainerConfiguration(title: "Pasos",
+                                                 symbol: "figure.walk",
+                                                 subtitle: "Promedio: \(averageSteps.formatted()) ?? 0) Pasos",
+                                                 context: .steps,
+                                                 isNav: true)
         
         //MARK: - Container start
 
         ChartContainer(config: config) {
             
-            //MARK: - Empty View
-            
-            if chartData.isEmpty {
-                ChartEmptyView(systemImageName: "chart.bar", title: "Sin Datos", description: "No hay datos sobre pasos en la APP Salud.")
-                
-            } else {
-                
                 // MARK: - Chart
                 
                 Chart {
                     if let selectedHealthMetric {
                         ChartAnnotationView(data: selectedHealthMetric, context: .steps)
                     }
-                    RuleMark(y: .value("Promedio", ChartHelper.averageValue(for: chartData)))
-                        .foregroundStyle(Color.secondary.opacity(0.8))
-                        .lineStyle(.init(lineWidth: 1, dash: [5]))
+                    if !chartData.isEmpty {
+                        RuleMark(y: .value("Promedio", averageSteps ))
+                            .foregroundStyle(Color.secondary.opacity(0.8))
+                            .lineStyle(.init(lineWidth: 1, dash: [5]))
+                    }
                     
                     ForEach(chartData) { steps in
                         BarMark(x: .value("Fecha", steps.date, unit: .day),
@@ -73,7 +76,14 @@ struct StepBarChart: View {
                         AxisValueLabel((value.as(Double.self) ?? 0 ).formatted(.number.notation(.compactName)))
                     }
                 }
-            }
+            
+                .overlay {
+                    //MARK: - Empty View
+                        
+                    if chartData.isEmpty {
+                        ChartEmptyView(systemImageName: "chart.bar", title: "Sin Datos", description: "No hay datos sobre pasos en la APP Salud.")
+                    }
+                }
         }
         .sensoryFeedback(.selection, trigger: selectedDay)
         .onChange(of: rawSelectedDate) { oldValue, newValue in

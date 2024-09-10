@@ -22,6 +22,7 @@
 		B7464D1D2C6D672B0090E206 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7464D1C2C6D672B0090E206 /* Preview Assets.xcassets */; };
 		B75CFD652C7D44FD00336068 /* HealthMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75CFD642C7D44FD00336068 /* HealthMetric.swift */; };
 		B776675A2C8F7DEF00BB8691 /* SegError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77667592C8F7DEF00BB8691 /* SegError.swift */; };
+		B776675C2C90B88F00BB8691 /* Array+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B776675B2C90B88F00BB8691 /* Array+Ext.swift */; };
 		B7EA93802C8B953000F3004A /* ChartEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7EA937F2C8B953000F3004A /* ChartEmptyView.swift */; };
 		B7F3CDE42C86C7C0006F2270 /* WeightBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F3CDE32C86C7C0006F2270 /* WeightBarChart.swift */; };
 		B7F648C02C6FF92900C07B8C /* HealthKitPermissionPrimingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F648BF2C6FF92900C07B8C /* HealthKitPermissionPrimingView.swift */; };
@@ -47,6 +48,7 @@
 		B7464D1C2C6D672B0090E206 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B75CFD642C7D44FD00336068 /* HealthMetric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthMetric.swift; sourceTree = "<group>"; };
 		B77667592C8F7DEF00BB8691 /* SegError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegError.swift; sourceTree = "<group>"; };
+		B776675B2C90B88F00BB8691 /* Array+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Ext.swift"; sourceTree = "<group>"; };
 		B7EA937F2C8B953000F3004A /* ChartEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartEmptyView.swift; sourceTree = "<group>"; };
 		B7F3CDE32C86C7C0006F2270 /* WeightBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightBarChart.swift; sourceTree = "<group>"; };
 		B7F648BF2C6FF92900C07B8C /* HealthKitPermissionPrimingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPermissionPrimingView.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				B7243CAC2C7E6C9200EDCBEB /* Date+Ext.swift */,
+				B776675B2C90B88F00BB8691 /* Array+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -263,6 +266,7 @@
 				B75CFD652C7D44FD00336068 /* HealthMetric.swift in Sources */,
 				B7243CAA2C7E6BBD00EDCBEB /* ChartDataTypes.swift in Sources */,
 				B71A83162C827A63005BD6D6 /* StepPieChart.swift in Sources */,
+				B776675C2C90B88F00BB8691 /* Array+Ext.swift in Sources */,
 				B711353A2C83B6E20030266A /* WeightLineChart.swift in Sources */,
 				B7243CAD2C7E6C9200EDCBEB /* Date+Ext.swift in Sources */,
 			);

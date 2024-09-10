@@ -12,14 +12,14 @@ struct StepPieChart: View {
     
     @State private var rawSelectionChartValue: Double? = 0
     @State private var selectedDay: Date?
+    @State private var lastSelectedValue: Double = 0
     
     var selectedWeekday: DateValueChartData? {
-        guard let rawSelectionChartValue else { return nil }
         var total = 0.0
         
         return chartData.first {
             total += $0.value
-            return rawSelectionChartValue <= total
+            return lastSelectedValue <= total
         }
     }
     
@@ -33,15 +33,8 @@ struct StepPieChart: View {
         
         //MARK: - Container start
 
-        
         ChartContainer(config: config) {
                     
-            //MARK: - Empty View
-
-            if chartData.isEmpty {
-                ChartEmptyView(systemImageName: "chart.pie", title: "Sin Datos", description: "No hay datos sobre pasos en la APP Salud.")
-            } else {
-
                 //MARK: - Chart
 
                 Chart {
@@ -53,18 +46,18 @@ struct StepPieChart: View {
                         .foregroundStyle(.teal)
                         .cornerRadius(6)
                         .opacity(selectedWeekday?.date.weekdayInt == weekday.date.weekdayInt ? 1 : 0.3)
-                        
-    //                  ----  To show the values inside the chart
-    //
-    //                    .annotation(position: .overlay) {
-    //                        Text(weekday.value, format: .number.precision(.fractionLength(0)))
-    //                            .foregroundStyle(.white)
-    //                        .fontWeight(.bold)
-    //                    }
-                        
                     }
                 }
                 .chartAngleSelection(value: $rawSelectionChartValue.animation(.easeInOut))
+                .onChange(of: rawSelectionChartValue) { oldValue, newValue in
+                    withAnimation(.easeInOut){
+                        guard let newValue else {
+                            lastSelectedValue = oldValue ?? 0
+                            return
+                        }
+                        lastSelectedValue = newValue
+                    }
+                }
                 .frame(height: 240)
                 .chartBackground { proxy in
                     GeometryReader { geo in
@@ -74,7 +67,7 @@ struct StepPieChart: View {
                                 VStack {
                                     Text(selectedWeekday.date.weekdayTitle)
                                         .font(.title3.bold())
-                                        .contentTransition(.identity)
+                                        .animation(.none)
                                     
                                     Text(selectedWeekday.value, format: .number.precision(.fractionLength(0)))
                                         .fontWeight(.medium)
@@ -87,7 +80,13 @@ struct StepPieChart: View {
                         }
                     }
                 }
-            }
+                .overlay {
+                    //MARK: - Empty View
+                    
+                    if chartData.isEmpty {
+                        ChartEmptyView(systemImageName: "chart.pie", title: "Sin Datos", description: "No hay datos sobre pasos en la APP Salud.")
+                    }
+                }
         }
         .sensoryFeedback(.impact, trigger: selectedDay)
         .onChange(of: selectedWeekday) { oldValue, newValue in

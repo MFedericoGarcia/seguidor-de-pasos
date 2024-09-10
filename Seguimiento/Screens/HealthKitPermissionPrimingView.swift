@@ -44,7 +44,6 @@ struct HealthKitPermissionPrimingView: View {
             .bold()
         }
         .padding(30)
-        .interactiveDismissDisabled()
         .healthDataAccessRequest(store: hkManager.store,
                                  shareTypes: hkManager.types,
                                  readTypes: hkManager.types,

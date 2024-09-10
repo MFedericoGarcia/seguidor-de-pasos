@@ -25,12 +25,14 @@ struct HealthDataListView: View {
     @State private var writeError: SegError = .noData
         
     var body: some View {
-        List(listData.reversed()) { i in
-            HStack {
-                Text(i.date, format: .dateTime.day().month().year())
-                Spacer()
-                Text(i.value, format: .number.precision(.fractionLength(metric == .steps ? 0 : 2)))
+        List(listData.reversed()) { data in
+            
+            LabeledContent {                
+                Text(data.value, format: .number.precision(.fractionLength(metric == .steps ? 0 : 2)))
+            } label: {
+                Text(data.date, format: .dateTime.day().month().year())
             }
+
         }
         .navigationTitle(metric.title)
         .sheet(isPresented: $isShowingAddData){
@@ -47,14 +49,13 @@ struct HealthDataListView: View {
         NavigationStack {
             Form{
                 DatePicker("Fecha", selection: $addDataDate, displayedComponents: .date)
-                HStack {
-                    Text(metric.title)
-                    Spacer()
+                LabeledContent(metric.title) {
                     TextField("Valor", text: $addValue)
                         .multilineTextAlignment(.trailing)
                         .frame(width: 140)
                         .keyboardType(metric == .steps ? .numberPad : .decimalPad)
                 }
+
             }
             .navigationTitle(metric.title)
             .alert(isPresented: $isShowingAlert, error: writeError) { writeError in

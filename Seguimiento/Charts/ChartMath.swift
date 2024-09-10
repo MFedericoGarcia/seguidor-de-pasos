@@ -13,7 +13,8 @@ struct ChartMath {
    static func averageWeekdayCount(for metric: [HealthMetric]) -> [DateValueChartData] {
        
        /// agrupa los resultados por dia, 1 domingo, 2 lunes ....
-       let sortedByWeekday = metric.sorted { $0.date.weekdayInt < $1.date.weekdayInt }
+//       let sortedByWeekday = metric.sorted { $0.date.weekdayInt < $1.date.weekdayInt }
+       let sortedByWeekday = metric.sorted(using: KeyPathComparator(\.date.weekdayInt))
        
        /// cuando cuambia de dia (chunked) lo detecta y crea un nuevo array para cada cambio
        let weekdayArray = sortedByWeekday.chunked { $0.date.weekdayInt == $1.date.weekdayInt }
@@ -45,7 +46,9 @@ struct ChartMath {
         }
         
         /// agrupa los resultados por dia, 1 domingo, 2 lunes ....
-        let sortedByWeekday = diffValues.sorted { $0.date.weekdayInt < $1.date.weekdayInt }
+//        let sortedByWeekday = diffValues.sorted { $0.date.weekdayInt < $1.date.weekdayInt }
+        let sortedByWeekday = diffValues.sorted(using: KeyPathComparator(\.date.weekdayInt) )
+
         /// cuando cuambia de dia (chunked) lo detecta y crea un nuevo array para cada cambio
         let weekdayArray = sortedByWeekday.chunked { $0.date.weekdayInt == $1.date.weekdayInt }
         
