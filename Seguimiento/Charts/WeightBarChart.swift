@@ -84,9 +84,9 @@ struct WeightBarChart: View {
                     .dateTime.weekday(.wide))
                     .font(.footnote.bold())
                     .foregroundStyle(.secondary)
-            Text("\(selectedData!.value > 0 ? "+" : "") \(selectedData?.value ?? 0, format: .number.precision(.fractionLength(2)))")
+            Text("\(selectedData?.value ?? 1 > 0 ? "+" : "") \(selectedData?.value ?? 0, format: .number.precision(.fractionLength(2)))")
                 .fontWeight(.heavy)
-                .foregroundStyle(selectedData!.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
+                .foregroundStyle(selectedData?.value ?? 1 > 0 ? Color.indigo.gradient : Color.mint.gradient)
         }
         .padding(12)
         .background(

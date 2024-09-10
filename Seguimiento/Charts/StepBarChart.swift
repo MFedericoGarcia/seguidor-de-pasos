@@ -12,7 +12,7 @@ struct StepBarChart: View {
     
     //MARK: - Variables
     
-    @State private var rawSelectedDate : Date?
+    @State private var rawSelectedDate : Date? = .now
     @State private var selectedDay: Date?
     
     var chartData: [DateValueChartData]
