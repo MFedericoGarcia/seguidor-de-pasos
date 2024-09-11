@@ -20,14 +20,9 @@ struct WeightBarChart: View {
     }
     
     var body: some View {
-        
-        //MARK: - Container Configuration
-        
-        let config = ChartContainerConfiguration(title: "Promedios de cambio de peso", symbol: "figure", subtitle: "Por día (Últimos 28 Días)", context: .weight, isNav: false)
-        
         //MARK: - Container start
         
-        ChartContainer(config: config) {
+        ChartContainer(chartType: .weightDiffBar) {
             
             //MARK: - Chart
             
@@ -47,7 +42,6 @@ struct WeightBarChart: View {
                             y: .value("dif", weekday.value),
                             width: .fixed(30))
                     .opacity(selectedData?.date == nil || weekday.date == selectedData?.date ? 1.0 : 0.3)
-                    
                     .foregroundStyle(weekday.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
                 }
                 

@@ -12,7 +12,7 @@ struct StepBarChart: View {
     
     //MARK: - Variables
     
-    @State private var rawSelectedDate : Date? = .now
+    @State private var rawSelectedDate : Date? 
     @State private var selectedDay: Date?
     
     var chartData: [DateValueChartData]
@@ -28,18 +28,9 @@ struct StepBarChart: View {
     //MARK: - Body
     
     var body: some View {
-        
-        //MARK: - Container Configuration
-
-        let config = ChartContainerConfiguration(title: "Pasos",
-                                                 symbol: "figure.walk",
-                                                 subtitle: "Promedio: \(averageSteps.formatted()) ?? 0) Pasos",
-                                                 context: .steps,
-                                                 isNav: true)
-        
         //MARK: - Container start
 
-        ChartContainer(config: config) {
+        ChartContainer(chartType: .stepBar(average: averageSteps)) {
             
                 // MARK: - Chart
                 
@@ -64,8 +55,8 @@ struct StepBarChart: View {
                 .frame(height: 150)
                 .chartXSelection(value: $rawSelectedDate.animation(.easeInOut))
                 .chartXAxis{
-                    AxisMarks {
-                        AxisValueLabel(format: .dateTime.month(.defaultDigits).day())
+                    AxisMarks(values: .automatic) {
+                        AxisValueLabel(format: .dateTime.month(.defaultDigits).day(), centered: true)
                     }
                 }
                 .chartYAxis {

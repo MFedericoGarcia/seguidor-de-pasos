@@ -26,14 +26,9 @@ struct StepPieChart: View {
     var chartData: [DateValueChartData]
     
     var body: some View {
-        
-        //MARK: - Container Configuration
-
-        let config = ChartContainerConfiguration(title: "Promedio", symbol: "calendar", subtitle: "Últimos 28 Días", context: .steps, isNav: false)
-        
         //MARK: - Container start
 
-        ChartContainer(config: config) {
+        ChartContainer(chartType: .stepWeekdayPie) {
                     
                 //MARK: - Chart
 

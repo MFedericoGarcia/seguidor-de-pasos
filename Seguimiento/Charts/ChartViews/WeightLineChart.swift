@@ -27,14 +27,9 @@ struct WeightLineChart: View {
     }
     
     var body: some View {
-        
-        //MARK: - Container Configuration
-        
-        let config = ChartContainerConfiguration(title: "Peso", symbol: "figure", subtitle: "Promedio: \(averageWeight.formatted(.number.precision(.fractionLength(1))))", context: .weight, isNav: true)
-        
         //MARK: - Container start
         
-        ChartContainer(config: config) {
+        ChartContainer(chartType: .weightLine(average: averageWeight)) {
             
             //MARK: - Chart
             
