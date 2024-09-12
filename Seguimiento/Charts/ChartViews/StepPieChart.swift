@@ -41,6 +41,8 @@ struct StepPieChart: View {
                         .foregroundStyle(.teal)
                         .cornerRadius(6)
                         .opacity(selectedWeekday?.date.weekdayInt == weekday.date.weekdayInt ? 1 : 0.3)
+                        .accessibilityLabel(weekday.date.weekdayTitle)
+                        .accessibilityValue("\(Int(weekday.value)) Pasos")
                     }
                 }
                 .chartAngleSelection(value: $rawSelectionChartValue.animation(.easeInOut))
@@ -60,7 +62,7 @@ struct StepPieChart: View {
                             let frame = geo[plotFrame]
                             if let selectedWeekday {
                                 VStack {
-                                    Text(selectedWeekday.date.weekdayTitle)
+                                    Text(selectedWeekday.date.weekdayTitle.capitalizedFirstLetter())
                                         .font(.title3.bold())
                                         .animation(.none)
                                     
@@ -71,6 +73,7 @@ struct StepPieChart: View {
                                     
                                 }
                                 .position(x: frame.midX, y: frame.midY)
+                                .accessibilityHidden(true)
                             }
                         }
                     }

@@ -31,7 +31,9 @@ struct HealthDataListView: View {
                 Text(data.value, format: .number.precision(.fractionLength(metric == .steps ? 0 : 2)))
             } label: {
                 Text(data.date, format: .dateTime.day().month().year())
+                    .accessibilityLabel(data.date.accesibilityDate)
             }
+            .accessibilityElement(children: .combine)
 
         }
         .navigationTitle(metric.title)

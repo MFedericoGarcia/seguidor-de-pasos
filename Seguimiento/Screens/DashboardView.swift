@@ -76,7 +76,7 @@ struct DashboardView: View {
                 }
                 .padding()
                 .task { fetchHealthData() }
-                .navigationTitle("Dashboard")
+                .navigationTitle("Tablero")
                 .navigationDestination(for: HealthMetricContent.self) { metric in
                     HealthDataListView(metric: metric)
                 }

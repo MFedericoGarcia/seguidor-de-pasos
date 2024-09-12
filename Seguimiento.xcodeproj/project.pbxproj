@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B711353A2C83B6E20030266A /* WeightLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71135392C83B6E20030266A /* WeightLineChart.swift */; };
 		B711353D2C83B8D00030266A /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B711353C2C83B8D00030266A /* MockData.swift */; };
+		B71217F72C937844007808FE /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71217F62C937844007808FE /* String+Ext.swift */; };
 		B71A83162C827A63005BD6D6 /* StepPieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71A83152C827A63005BD6D6 /* StepPieChart.swift */; };
 		B7243CA22C7E54A200EDCBEB /* StepBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7243CA12C7E54A200EDCBEB /* StepBarChart.swift */; };
 		B7243CA82C7E67DB00EDCBEB /* ChartMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7243CA72C7E67DB00EDCBEB /* ChartMath.swift */; };
@@ -35,6 +36,7 @@
 /* Begin PBXFileReference section */
 		B71135392C83B6E20030266A /* WeightLineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightLineChart.swift; sourceTree = "<group>"; };
 		B711353C2C83B8D00030266A /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		B71217F62C937844007808FE /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		B71A83152C827A63005BD6D6 /* StepPieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepPieChart.swift; sourceTree = "<group>"; };
 		B7243CA12C7E54A200EDCBEB /* StepBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepBarChart.swift; sourceTree = "<group>"; };
 		B7243CA72C7E67DB00EDCBEB /* ChartMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartMath.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 			children = (
 				B7243CAC2C7E6C9200EDCBEB /* Date+Ext.swift */,
 				B776675B2C90B88F00BB8691 /* Array+Ext.swift */,
+				B71217F62C937844007808FE /* String+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -237,11 +240,12 @@
 			};
 			buildConfigurationList = B7464D0D2C6D67260090E206 /* Build configuration list for PBXProject "Seguimiento" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = es;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				es,
 			);
 			mainGroup = B7464D092C6D67260090E206;
 			packageReferences = (
@@ -288,6 +292,7 @@
 				B7FAA6D12C8CDBFB0001592E /* ChartHelper.swift in Sources */,
 				B7243CA82C7E67DB00EDCBEB /* ChartMath.swift in Sources */,
 				B75CFD652C7D44FD00336068 /* HealthMetric.swift in Sources */,
+				B71217F72C937844007808FE /* String+Ext.swift in Sources */,
 				B7243CAA2C7E6BBD00EDCBEB /* ChartDataTypes.swift in Sources */,
 				B71A83162C827A63005BD6D6 /* StepPieChart.swift in Sources */,
 				B776675C2C90B88F00BB8691 /* Array+Ext.swift in Sources */,

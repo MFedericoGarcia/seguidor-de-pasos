@@ -66,13 +66,26 @@ struct ChartContainer<Content: View>: View {
     var subtitle: String {
         switch chartType {
         case .stepBar(let average):
-            "Promedio: \(average.formatted()) ?? 0) Pasos"
+            "Promedio: \(average.formatted()) Pasos"
         case .stepWeekdayPie:
             "Últimos 28 Días"
         case .weightLine(let average):
             "Promedio: \(average.formatted(.number.precision(.fractionLength(1))))"
         case .weightDiffBar:
             "Por día (Últimos 28 Días)"
+        }
+    }
+    
+    var accessibilityLabel: String {
+        switch chartType {
+        case .stepBar(let average):
+            "Gráfico de barras, contador de pasos, últimos 28 Días , Promedio por día : \(average.formatted()) ?? 0) Pasos"
+        case .stepWeekdayPie:
+            "Gráfico de torta, promedio de pasos por día de la semana"
+        case .weightLine(let average):
+            "Gráfico de lineas, peso, Promedio de peso : \(average.formatted(.number.precision(.fractionLength(1))))"
+        case .weightDiffBar:
+            "Gráfico de barras, diferencia de peso promedio Por día de la semana"
         }
     }
     
@@ -84,7 +97,6 @@ struct ChartContainer<Content: View>: View {
             } else {
                 titleView
             }
-            
             content()
         }
         .padding()
@@ -104,6 +116,10 @@ struct ChartContainer<Content: View>: View {
         }
         .foregroundStyle(.secondary)
         .padding(.bottom, 12)
+        .accessibilityAddTraits(.isHeader)
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint("toca dos veces para ir a la lista de datos")
+        .accessibilityRemoveTraits(.isButton)
     }
         
     // MARK: - Title
@@ -113,10 +129,14 @@ struct ChartContainer<Content: View>: View {
             Label(title, systemImage: symbol)
                 .font(.title3.bold())
                 .foregroundStyle(context == .steps ? .teal : .indigo)
-            
+                
             Text(subtitle)
                 .font(.caption)
+                .foregroundStyle(.secondary)
         }
+        .accessibilityAddTraits(.isHeader)
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityElement(children: .contain)
     }
 }
 

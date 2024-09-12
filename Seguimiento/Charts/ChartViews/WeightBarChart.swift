@@ -37,16 +37,19 @@ struct WeightBarChart: View {
                         }
                 }
                 
-                ForEach(chartData){ weekday in
-                    BarMark(x: .value("Day", weekday.date, unit: .weekday),
-                            y: .value("dif", weekday.value),
-                            width: .fixed(30))
-                    .opacity(selectedData?.date == nil || weekday.date == selectedData?.date ? 1.0 : 0.3)
-                    .foregroundStyle(weekday.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
+                ForEach(chartData){ weightDiff in
+                   Plot {
+                       BarMark(x: .value("Day", weightDiff.date, unit: .weekday),
+                               y: .value("dif", weightDiff.value),
+                               width: .fixed(30))
+                       .opacity(selectedData?.date == nil || weightDiff.date == selectedData?.date ? 1.0 : 0.3)
+                       .foregroundStyle(weightDiff.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
+                   }
+                   .accessibilityLabel(weightDiff.date.weekdayTitle)
+                   .accessibilityValue("\(weightDiff.value.formatted(.number.precision(.fractionLength(1)).sign(strategy: .always())))")
                 }
-                
             }
-            .frame(height: 150)
+            .frame(height: 240)
             .chartXSelection(value: $rawSelectedDate.animation(.easeInOut))
             .chartXAxis{
                 AxisMarks(values: .stride(by: .day)) {

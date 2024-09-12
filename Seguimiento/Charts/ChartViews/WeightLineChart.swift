@@ -41,6 +41,7 @@ struct WeightLineChart: View {
                 RuleMark(y: .value("Prom", averageWeight))
                     .foregroundStyle(.mint)
                     .lineStyle(.init(lineWidth: 1, dash: [5]))
+                    .accessibilityHidden(true)
                     .annotation(alignment: .leading) {
                         Text("Prom")
                             .foregroundStyle(.mint)
@@ -49,17 +50,21 @@ struct WeightLineChart: View {
                 
                 ForEach(chartData) { weights in
                     
-                    AreaMark(x: .value("Día", weights.date, unit: .day),
-                             yStart: .value("Valor", weights.value),
-                             yEnd: .value("Min Valor", minValue))
-                    .foregroundStyle(Gradient(colors: [.indigo.opacity(0.5), .clear]))
-                    .interpolationMethod(.catmullRom)
-                    
-                    LineMark(x: .value("Día", weights.date, unit: .day),
-                             y: .value("Valor", weights.value))
-                    .foregroundStyle(.indigo)
-                    .interpolationMethod(.catmullRom)
-                    .symbol(.diamond)
+                    Plot {
+                        AreaMark(x: .value("Día", weights.date, unit: .day),
+                                 yStart: .value("Valor", weights.value),
+                                 yEnd: .value("Min Valor", minValue))
+                        .foregroundStyle(Gradient(colors: [.indigo.opacity(0.5), .clear]))
+                        .interpolationMethod(.catmullRom)
+                        
+                        LineMark(x: .value("Día", weights.date, unit: .day),
+                                 y: .value("Valor", weights.value))
+                        .foregroundStyle(.indigo)
+                        .interpolationMethod(.catmullRom)
+                        .symbol(.diamond)
+                    }
+                    .accessibilityLabel(weights.date.weekdayTitle)
+                    .accessibilityValue("\(weights.value.formatted(.number.precision(.fractionLength(1))))")
                 }
                 
             }

@@ -42,14 +42,19 @@ struct StepBarChart: View {
                         RuleMark(y: .value("Promedio", averageSteps ))
                             .foregroundStyle(Color.secondary.opacity(0.8))
                             .lineStyle(.init(lineWidth: 1, dash: [5]))
+                            .accessibilityHidden(true)
                     }
                     
                     ForEach(chartData) { steps in
-                        BarMark(x: .value("Fecha", steps.date, unit: .day),
-                                y: .value("Pasos", steps.value)
-                        )
-                        .opacity(rawSelectedDate == nil || steps.date == selectedHealthMetric?.date ? 1.0 : 0.3)
-                        .foregroundStyle(Color.teal.gradient)
+                        Plot {
+                            BarMark(x: .value("Fecha", steps.date, unit: .day),
+                                    y: .value("Pasos", steps.value)
+                            )
+                            .opacity(rawSelectedDate == nil || steps.date == selectedHealthMetric?.date ? 1.0 : 0.3)
+                            .foregroundStyle(Color.teal.gradient)
+                        }
+                        .accessibilityLabel(steps.date.accesibilityDate)
+                        .accessibilityValue("\(Int(steps.value)) Pasos")
                     }
                 }
                 .frame(height: 150)
