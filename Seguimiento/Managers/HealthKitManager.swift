@@ -19,11 +19,13 @@ import Observation
     var weightData: [HealthMetric] = []
     var weightDiffData: [HealthMetric] = []
     
+    /// Trae los ultimos 28 dias de pasos contados de HealthKit
+    /// - Returns: Array de  ``HealthMetric``
     func fetchStepCount() async throws -> [HealthMetric] {
+        
         guard store.authorizationStatus(for: HKQuantityType(.stepCount)) != .notDetermined else {
             throw SegError.authNotDetermined
         }
-        
         let interval = createDateInterval(from: .now, daysBack: 28)
         let queryPredicate = HKQuery.predicateForSamples(withStart: interval.start, end: interval.end)
         let samplePredicate = HKSamplePredicate.quantitySample(type: HKQuantityType(.stepCount), predicate: queryPredicate)
