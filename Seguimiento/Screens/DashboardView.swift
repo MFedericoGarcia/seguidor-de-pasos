@@ -27,15 +27,11 @@ struct DashboardView: View {
     //MARK: - Variables
     
     @Environment(HealthKitManager.self) private var hkManager
-    
-//      First Form for testing
-//    @AppStorage("hasSeenPermissionPriming") private var hasSeenPermissionPriming = false
-    
+        
     @State private var isShowingPermissionPrimingSheet = false
     @State private var selectedStat: HealthMetricContent = .steps
     @State private var isShowingAlert: Bool = false
     @State private var fetchError: SegError = .noData
-    var isSteps: Bool { selectedStat == .steps }
     
     //MARK: - Body
     
@@ -61,14 +57,14 @@ struct DashboardView: View {
                         WeightLineChart( chartData: ChartHelper.convert(data: hkManager.weightData))
                         WeightBarChart(chartData: ChartMath.averageDailyWeightDiffs(for: hkManager.weightDiffData))
                     }
-                     
+                     // Utiliza MOCKDATA para testeo en dispositivos
 //                    switch selectedStat {
 //                    case .steps:
-//                        StepBarChart(chartData: MockData.steps, selectedStat: selectedStat)
+//                        StepBarChart(chartData: ChartHelper.convert(data: MockData.steps))
 //                        StepPieChart(chartData: ChartMath.averageWeekdayCount(for: MockData.steps))
 //                        
 //                    case .weight:
-//                        WeightLineChart(selectedStat: selectedStat, chartData: MockData.weights)
+//                        WeightLineChart(chartData: ChartHelper.convert(data: MockData.weights))
 //                        WeightBarChart(chartData: ChartMath.averageDailyWeightDiffs(for: MockData.weights))
 //                    }
                     
@@ -76,28 +72,13 @@ struct DashboardView: View {
                     
                 }
                 .padding()
-                .navigationTitle("Dashboard")
+                .task { fetchHealthData() }
+                .navigationTitle("Tablero")
                 .navigationDestination(for: HealthMetricContent.self) { metric in
                     HealthDataListView(metric: metric)
                 }
-                
-                .task {
-                    do {
-                       try await hkManager.fetchStepCount()
-                       try await hkManager.fetchWeights()
-                       try await hkManager.fetchWeightsForDifferentials()
-                    } catch SegError.authNotDetermined {
-                        isShowingPermissionPrimingSheet = true
-                    } catch SegError.noData {
-                        fetchError = .noData
-                        isShowingAlert = true
-                    } catch {
-                        fetchError = .unableToCompleteRequest
-                        isShowingAlert = true
-                    }
-                }
-                .sheet(isPresented: $isShowingPermissionPrimingSheet, onDismiss: {
-                    
+                .fullScreenCover(isPresented: $isShowingPermissionPrimingSheet, onDismiss: {
+                    fetchHealthData()
                 }, content: {
                     HealthKitPermissionPrimingView()
                 })
@@ -109,7 +90,34 @@ struct DashboardView: View {
 
             }
         }
-       .tint(isSteps ? .teal : .indigo)
+       .tint(selectedStat == .steps ? .teal : .indigo)
+    }
+    
+    // MARK: - Func fetch data
+    
+    private func fetchHealthData() {
+        
+        Task {
+            do {
+                
+                async let steps = hkManager.fetchStepCount()
+                async let weightsForLineChart = hkManager.fetchWeights(daysBack: 28)
+                async let weightsForDiffBarChart = hkManager.fetchWeights(daysBack: 29)
+                
+                hkManager.stepData = try await steps
+                hkManager.weightData = try await weightsForLineChart
+                hkManager.weightDiffData = try await weightsForDiffBarChart
+                
+            } catch SegError.authNotDetermined {
+                isShowingPermissionPrimingSheet = true
+            } catch SegError.noData {
+                fetchError = .noData
+                isShowingAlert = true
+            } catch {
+                fetchError = .unableToCompleteRequest
+                isShowingAlert = true
+            }
+        }
     }
 }
 

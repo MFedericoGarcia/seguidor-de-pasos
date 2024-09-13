@@ -11,7 +11,7 @@ import Charts
 struct WeightLineChart: View {
     @State private var rawSelectedDate: Date?
     @State private var selectedDay: Date?
-
+    
     var chartData: [DateValueChartData]
     
     var selectedHealthMetric: DateValueChartData? {
@@ -21,68 +21,75 @@ struct WeightLineChart: View {
     var minValue: Double  {
         chartData.map { $0.value }.min() ?? 0
     }
-
+    
+    var averageWeight: Double {
+        chartData.map { $0.value }.average
+    }
+    
     var body: some View {
+        //MARK: - Container start
         
-        //MARK: - Container and Title
-        
-        ChartContainer(title: "Peso", symbol: "figure", subtitle: "Promedio: \(Int(165))", context: .weight, isNav: true) {
+        ChartContainer(chartType: .weightLine(average: averageWeight)) {
             
-            //MARK: - Empty View
-
-            if chartData.isEmpty {
-                ChartEmptyView(systemImageName: "chart.xyaxis.line", title: "Sin Datos", description: "No hay datos sobre peso en la APP Salud.")
-            } else {
+            //MARK: - Chart
+            
+            Chart {
+                if let selectedHealthMetric {
+                    ChartAnnotationView(data: selectedHealthMetric, context: .weight)
+                }
                 
-                //MARK: - Chart
-
-                Chart {
-                    if let selectedHealthMetric {
-                        RuleMark(x: .value("Selected Metric", selectedHealthMetric.date, unit: .day))
-                            .foregroundStyle(Color.secondary.opacity(0.3))
-                            .offset(y: -5)
-                            .annotation(position: .top, spacing: 0, overflowResolution: .init(x: .fit(to: .chart), y: .disabled)) { ChartAnnotationView(data: selectedHealthMetric, context: .weight) }
-                    }
-                    
-                    RuleMark(y: .value("Meta", 165))
+                if !chartData.isEmpty {
+                    RuleMark(y: .value("Prom", averageWeight))
                         .foregroundStyle(.mint)
                         .lineStyle(.init(lineWidth: 1, dash: [5]))
+                        .accessibilityHidden(true)
                         .annotation(alignment: .leading) {
-                            Text("Meta")
+                            Text("Prom")
                                 .foregroundStyle(.mint)
                                 .font(.caption)
                         }
+                }
+                
+                ForEach(chartData) { weights in
                     
-                    ForEach(chartData) { weights in
-                        
+                    Plot {
                         AreaMark(x: .value("Día", weights.date, unit: .day),
                                  yStart: .value("Valor", weights.value),
                                  yEnd: .value("Min Valor", minValue))
                         .foregroundStyle(Gradient(colors: [.indigo.opacity(0.5), .clear]))
                         .interpolationMethod(.catmullRom)
-
+                        
                         LineMark(x: .value("Día", weights.date, unit: .day),
                                  y: .value("Valor", weights.value))
                         .foregroundStyle(.indigo)
                         .interpolationMethod(.catmullRom)
                         .symbol(.diamond)
                     }
-                    
+                    .accessibilityLabel(weights.date.weekdayTitle)
+                    .accessibilityValue("\(weights.value.formatted(.number.precision(.fractionLength(1))))")
                 }
-                .frame(height: 150)
-                .chartXSelection(value: $rawSelectedDate)
-                .chartYScale(domain: .automatic(includesZero: false))
-                .chartXAxis{
-                    AxisMarks {
-                        AxisValueLabel(format: .dateTime.month(.defaultDigits).day())
-                    }
+                
+            }
+            .frame(height: 150)
+            .chartXSelection(value: $rawSelectedDate)
+            .chartYScale(domain: .automatic(includesZero: false))
+            .chartXAxis{
+                AxisMarks {
+                    AxisValueLabel(format: .dateTime.month(.defaultDigits).day())
                 }
-                .chartYAxis {
-                    AxisMarks { value in
-                        AxisGridLine()
-                            .foregroundStyle(Color.secondary.opacity(0.3))
-                        AxisValueLabel()
-                    }
+            }
+            .chartYAxis {
+                AxisMarks { value in
+                    AxisGridLine()
+                        .foregroundStyle(Color.secondary.opacity(0.3))
+                    AxisValueLabel()
+                }
+            }
+            .overlay {
+                //MARK: - Empty View
+                
+                if chartData.isEmpty {
+                    ChartEmptyView(systemImageName: "chart.xyaxis.line", title: "Sin Datos", description: "No hay datos sobre peso en la APP Salud.")
                 }
             }
         }

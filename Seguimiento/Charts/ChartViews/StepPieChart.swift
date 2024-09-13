@@ -12,31 +12,24 @@ struct StepPieChart: View {
     
     @State private var rawSelectionChartValue: Double? = 0
     @State private var selectedDay: Date?
+    @State private var lastSelectedValue: Double = 0
     
     var selectedWeekday: DateValueChartData? {
-        guard let rawSelectionChartValue else { return nil }
         var total = 0.0
         
         return chartData.first {
             total += $0.value
-            return rawSelectionChartValue <= total
+            return lastSelectedValue <= total
         }
     }
     
     var chartData: [DateValueChartData]
     
     var body: some View {
-        
-        //MARK: - Container and Title
+        //MARK: - Container start
 
-        ChartContainer(title: "Promedio", symbol: "calendar", subtitle: "Últimos 28 Días", context: .steps, isNav: false) {
-            
-            //MARK: - Empty View
-
-            if chartData.isEmpty {
-                ChartEmptyView(systemImageName: "chart.pie", title: "Sin Datos", description: "No hay datos sobre pasos en la APP Salud.")
-            } else {
-
+        ChartContainer(chartType: .stepWeekdayPie) {
+                    
                 //MARK: - Chart
 
                 Chart {
@@ -48,18 +41,20 @@ struct StepPieChart: View {
                         .foregroundStyle(.teal)
                         .cornerRadius(6)
                         .opacity(selectedWeekday?.date.weekdayInt == weekday.date.weekdayInt ? 1 : 0.3)
-                        
-    //                  ----  To show the values inside the chart
-    //
-    //                    .annotation(position: .overlay) {
-    //                        Text(weekday.value, format: .number.precision(.fractionLength(0)))
-    //                            .foregroundStyle(.white)
-    //                        .fontWeight(.bold)
-    //                    }
-                        
+                        .accessibilityLabel(weekday.date.weekdayTitle)
+                        .accessibilityValue("\(Int(weekday.value)) Pasos")
                     }
                 }
                 .chartAngleSelection(value: $rawSelectionChartValue.animation(.easeInOut))
+                .onChange(of: rawSelectionChartValue) { oldValue, newValue in
+                    withAnimation(.easeInOut){
+                        guard let newValue else {
+                            lastSelectedValue = oldValue ?? 0
+                            return
+                        }
+                        lastSelectedValue = newValue
+                    }
+                }
                 .frame(height: 240)
                 .chartBackground { proxy in
                     GeometryReader { geo in
@@ -67,9 +62,9 @@ struct StepPieChart: View {
                             let frame = geo[plotFrame]
                             if let selectedWeekday {
                                 VStack {
-                                    Text(selectedWeekday.date.weekdayTitle)
+                                    Text(selectedWeekday.date.weekdayTitle.capitalizedFirstLetter())
                                         .font(.title3.bold())
-                                        .contentTransition(.identity)
+                                        .animation(.none)
                                     
                                     Text(selectedWeekday.value, format: .number.precision(.fractionLength(0)))
                                         .fontWeight(.medium)
@@ -78,11 +73,18 @@ struct StepPieChart: View {
                                     
                                 }
                                 .position(x: frame.midX, y: frame.midY)
+                                .accessibilityHidden(true)
                             }
                         }
                     }
                 }
-            }
+                .overlay {
+                    //MARK: - Empty View
+                    
+                    if chartData.isEmpty {
+                        ChartEmptyView(systemImageName: "chart.pie", title: "Sin Datos", description: "No hay datos sobre pasos en la APP Salud.")
+                    }
+                }
         }
         .sensoryFeedback(.impact, trigger: selectedDay)
         .onChange(of: selectedWeekday) { oldValue, newValue in
