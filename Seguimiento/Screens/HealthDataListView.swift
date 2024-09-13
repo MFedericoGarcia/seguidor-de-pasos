@@ -9,9 +9,10 @@ import SwiftUI
 
 struct HealthDataListView: View {
     
+    //MARK: - Variables
+
     @Environment(HealthKitManager.self) private var hkManager
 
-    
     var metric: HealthMetricContent
 
     var listData: [HealthMetric] {
@@ -24,6 +25,8 @@ struct HealthDataListView: View {
     @State private var isShowingAlert: Bool = false
     @State private var writeError: SegError = .noData
         
+    //MARK: - Body
+
     var body: some View {
         List(listData.reversed()) { data in
             
@@ -47,6 +50,8 @@ struct HealthDataListView: View {
         }
     }
     
+    //MARK: - Func Add
+
     var addDataView: some View {
         NavigationStack {
             Form{
@@ -90,6 +95,8 @@ struct HealthDataListView: View {
         }
     }
     
+    //MARK: - Func Save
+
     private func addDataToHealthKit() {
         guard let value = Double(addValue) else {
             writeError = .invalidValue

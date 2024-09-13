@@ -10,6 +10,10 @@ import Algorithms
 
 struct ChartMath {
     
+    /// Convierte los datos almacenados enel Array de  ``HealthMetric`` en datos listos para utilizar en los graficos
+    /// los agrupa por dia de la semana, para poder promediar los datos por cada dia de la semana en especifico
+    /// - Parameter metric: Datos almacenados desde la appa HealthKit``HealthMetric``
+    /// - Returns: Array de  ``DateValueChartData``
    static func averageWeekdayCount(for metric: [HealthMetric]) -> [DateValueChartData] {
        
        /// agrupa los resultados por dia, 1 domingo, 2 lunes ....
@@ -32,6 +36,9 @@ struct ChartMath {
         return weekdayChartData
     }
     
+    /// Toma los datos de los pesos del Array ``HealthMetric`` calcula la diferencia de pesos de un dia al otro y devuelve los datos listos para utilizar en el grafico
+    /// - Parameter weights: Datos sobre pesos almacenados desde la appa HealthKit``HealthMetric``
+    /// - Returns: Array de ``DateValueChartData``
     static func averageDailyWeightDiffs(for weights: [HealthMetric]) -> [DateValueChartData] {
         
         var diffValues: [(date: Date, value: Double)] = []

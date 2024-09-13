@@ -27,10 +27,7 @@ struct DashboardView: View {
     //MARK: - Variables
     
     @Environment(HealthKitManager.self) private var hkManager
-    
-//      First Form for testing
-//    @AppStorage("hasSeenPermissionPriming") private var hasSeenPermissionPriming = false
-    
+        
     @State private var isShowingPermissionPrimingSheet = false
     @State private var selectedStat: HealthMetricContent = .steps
     @State private var isShowingAlert: Bool = false
@@ -60,7 +57,7 @@ struct DashboardView: View {
                         WeightLineChart( chartData: ChartHelper.convert(data: hkManager.weightData))
                         WeightBarChart(chartData: ChartMath.averageDailyWeightDiffs(for: hkManager.weightDiffData))
                     }
-                     
+                     // Utiliza MOCKDATA para testeo en dispositivos
 //                    switch selectedStat {
 //                    case .steps:
 //                        StepBarChart(chartData: ChartHelper.convert(data: MockData.steps))
@@ -95,6 +92,8 @@ struct DashboardView: View {
         }
        .tint(selectedStat == .steps ? .teal : .indigo)
     }
+    
+    // MARK: - Func fetch data
     
     private func fetchHealthData() {
         

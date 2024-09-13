@@ -10,6 +10,8 @@ import HealthKitUI
 
 struct HealthKitPermissionPrimingView: View {
     
+    //MARK: - Variables
+    
     @Environment(HealthKitManager.self) private var hkManager
     @Environment(\.dismiss) private var dismiss
     @State private var isShowingHealthKitPermissions = false
@@ -19,6 +21,8 @@ struct HealthKitPermissionPrimingView: View {
     
     Tú puedes también agregar información a Apple Health desde esta app. Tu información permanecerá privada y segura
     """
+    
+    //MARK: - Body
     
     var body: some View {
         VStack(spacing: 130) {
@@ -38,6 +42,7 @@ struct HealthKitPermissionPrimingView: View {
             
             Button("Connect Apple Health") {
                 isShowingHealthKitPermissions = true
+                
             }
             .buttonStyle(.borderedProminent)
             .tint(.pink)

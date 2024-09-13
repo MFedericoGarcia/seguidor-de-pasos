@@ -45,6 +45,9 @@ import Observation
         }
     }
     
+    /// Trae los (X) ultimos dias de pesos registrados en HealthKit
+    /// - Parameter daysBack: X: INT  -  Dias que queremos conseguir de informacion de hoy para atras
+    /// - Returns: Array de ``HealthMetric``
     func fetchWeights(daysBack: Int) async throws -> [HealthMetric] {
         guard store.authorizationStatus(for: HKQuantityType(.bodyMass)) != .notDetermined else {
             throw SegError.authNotDetermined
@@ -60,7 +63,7 @@ import Observation
         do {
             let weights = try await weightQuery.result(for: store)
             return weights.statistics().map {
-                .init(date: $0.startDate, value: $0.mostRecentQuantity()?.doubleValue(for: .pound()) ?? 0)
+                .init(date: $0.startDate, value: $0.mostRecentQuantity()?.doubleValue(for: .gramUnit(with: .kilo)) ?? 0)
             }
         } catch HKError.errorNoData {
             throw SegError.noData
@@ -69,6 +72,10 @@ import Observation
         }
     }
     
+    /// Agrega y guarda Datos de pasos en la app HealthKit ( si tenemos la autorizacion )
+    /// - Parameters:
+    ///   - date: Dia del registro
+    ///   - value: Cantidad de pasos a registrar
     func addStepData(for date: Date, value: Double) async throws {
         let status = store.authorizationStatus(for: HKQuantityType(.stepCount))
         switch status {
@@ -91,6 +98,10 @@ import Observation
         }
     }
     
+    /// Agrega y guarda Datos de los pesos en la app HealthKit ( si tenemos la autorizacion )
+    /// - Parameters:
+    ///   - date: Dia del registro
+    ///   - value: Cantidad de pasos a registrar
     func addWeightData(for date: Date, value: Double) async throws {
         
         let status = store.authorizationStatus(for: HKQuantityType(.bodyMass))
@@ -116,6 +127,11 @@ import Observation
         }
     }
     
+    /// Crea el Intervalo de dias en formato DateInterval
+    /// - Parameters:
+    ///   - date: Dia de inicio
+    ///   - daysBack: Dia hasta el cual se quiere extender el intervalo
+    /// - Returns: ``DateInterval``
     private func createDateInterval(from date: Date, daysBack: Int) -> DateInterval {
         let calendar = Calendar.current
         let startOfEndDate = calendar.startOfDay(for: date)
@@ -125,12 +141,13 @@ import Observation
         return DateInterval(start: startDay, end: endDate)
     }
     
+    /// Funcion para agregar informacion ( datos de pasos y pesos ) a la base de datos de HealthKit, para testeo de la app
     func addSimulatorData() async {
         var mockSamples: [HKQuantitySample] = []
         
         for i in 0..<29 {
             let stepQuantity = HKQuantity(unit: .count(), doubleValue: .random(in: 4_000...20_000))
-            let weightQuantity = HKQuantity(unit: .pound(), doubleValue: .random(in: (160 + Double(i/3)...165 + Double(i/3))))
+            let weightQuantity = HKQuantity(unit: .gramUnit(with: .kilo), doubleValue: .random(in: (83 + Double(i/6)...85 + Double(i/6))))
             
             let startDate = Calendar.current.date(byAdding: .day, value: -i, to: .now)!
             let endDate = Calendar.current.date(byAdding: .second, value: 1, to: startDate)!

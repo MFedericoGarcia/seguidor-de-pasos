@@ -38,15 +38,17 @@ struct WeightLineChart: View {
                     ChartAnnotationView(data: selectedHealthMetric, context: .weight)
                 }
                 
-                RuleMark(y: .value("Prom", averageWeight))
-                    .foregroundStyle(.mint)
-                    .lineStyle(.init(lineWidth: 1, dash: [5]))
-                    .accessibilityHidden(true)
-                    .annotation(alignment: .leading) {
-                        Text("Prom")
-                            .foregroundStyle(.mint)
-                            .font(.caption)
-                    }
+                if !chartData.isEmpty {
+                    RuleMark(y: .value("Prom", averageWeight))
+                        .foregroundStyle(.mint)
+                        .lineStyle(.init(lineWidth: 1, dash: [5]))
+                        .accessibilityHidden(true)
+                        .annotation(alignment: .leading) {
+                            Text("Prom")
+                                .foregroundStyle(.mint)
+                                .font(.caption)
+                        }
+                }
                 
                 ForEach(chartData) { weights in
                     
