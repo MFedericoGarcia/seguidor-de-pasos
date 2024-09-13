@@ -19,7 +19,7 @@ import Observation
     var weightData: [HealthMetric] = []
     var weightDiffData: [HealthMetric] = []
     
-    /// Trae los ultimos 28 dias de pasos contados de HealthKit
+    /// Trae los ultimos 28 días de pasos contados de Health App
     /// - Returns: Array de  ``HealthMetric``
     func fetchStepCount() async throws -> [HealthMetric] {
         
@@ -45,8 +45,8 @@ import Observation
         }
     }
     
-    /// Trae los (X) ultimos dias de pesos registrados en HealthKit
-    /// - Parameter daysBack: X: INT  -  Dias que queremos conseguir de informacion de hoy para atras
+    /// Trae los (X) últimos días de pesos registrados en Health App
+    /// - Parameter daysBack: X: INT  -  Días que queremos conseguir de informacion de hoy para atras
     /// - Returns: Array de ``HealthMetric``
     func fetchWeights(daysBack: Int) async throws -> [HealthMetric] {
         guard store.authorizationStatus(for: HKQuantityType(.bodyMass)) != .notDetermined else {
@@ -72,9 +72,9 @@ import Observation
         }
     }
     
-    /// Agrega y guarda Datos de pasos en la app HealthKit ( si tenemos la autorizacion )
+    /// Agrega y guarda Datos de pasos en la app Health ( si tenemos la autorización )
     /// - Parameters:
-    ///   - date: Dia del registro
+    ///   - date: Día del registro
     ///   - value: Cantidad de pasos a registrar
     func addStepData(for date: Date, value: Double) async throws {
         let status = store.authorizationStatus(for: HKQuantityType(.stepCount))
@@ -98,9 +98,9 @@ import Observation
         }
     }
     
-    /// Agrega y guarda Datos de los pesos en la app HealthKit ( si tenemos la autorizacion )
+    /// Agrega y guarda Datos de los pesos en la app Health ( si tenemos la autorización )
     /// - Parameters:
-    ///   - date: Dia del registro
+    ///   - date: Día del registro
     ///   - value: Cantidad de pasos a registrar
     func addWeightData(for date: Date, value: Double) async throws {
         
@@ -127,10 +127,10 @@ import Observation
         }
     }
     
-    /// Crea el Intervalo de dias en formato DateInterval
+    /// Crea el Intervalo de días en formato DateInterval
     /// - Parameters:
-    ///   - date: Dia de inicio
-    ///   - daysBack: Dia hasta el cual se quiere extender el intervalo
+    ///   - date: Día de inicio
+    ///   - daysBack: Día hasta el cual se quiere extender el intervalo
     /// - Returns: ``DateInterval``
     private func createDateInterval(from date: Date, daysBack: Int) -> DateInterval {
         let calendar = Calendar.current
@@ -141,26 +141,26 @@ import Observation
         return DateInterval(start: startDay, end: endDate)
     }
     
-    /// Funcion para agregar informacion ( datos de pasos y pesos ) a la base de datos de HealthKit, para testeo de la app
-    func addSimulatorData() async {
-        var mockSamples: [HKQuantitySample] = []
-        
-        for i in 0..<29 {
-            let stepQuantity = HKQuantity(unit: .count(), doubleValue: .random(in: 4_000...20_000))
-            let weightQuantity = HKQuantity(unit: .gramUnit(with: .kilo), doubleValue: .random(in: (83 + Double(i/6)...85 + Double(i/6))))
-            
-            let startDate = Calendar.current.date(byAdding: .day, value: -i, to: .now)!
-            let endDate = Calendar.current.date(byAdding: .second, value: 1, to: startDate)!
-            
-            let stepSample = HKQuantitySample(type: HKQuantityType(.stepCount), quantity: stepQuantity, start: startDate, end: endDate )
-            let weightSample = HKQuantitySample(type: HKQuantityType(.bodyMass), quantity: weightQuantity, start: startDate, end: endDate)
-            
-            mockSamples.append(stepSample)
-            mockSamples.append(weightSample)
-
-        }
-        
-        try! await store.save(mockSamples)
-        print("Dummy data set up")
-    }
+    /// Funciín para agregar informaciín ( datos de pasos y pesos ) a la base de datos de Health, para testeo de la app
+//    func addSimulatorData() async {
+//        var mockSamples: [HKQuantitySample] = []
+//        
+//        for i in 0..<29 {
+//            let stepQuantity = HKQuantity(unit: .count(), doubleValue: .random(in: 4_000...20_000))
+//            let weightQuantity = HKQuantity(unit: .gramUnit(with: .kilo), doubleValue: .random(in: (83 + Double(i/6)...85 + Double(i/6))))
+//            
+//            let startDate = Calendar.current.date(byAdding: .day, value: -i, to: .now)!
+//            let endDate = Calendar.current.date(byAdding: .second, value: 1, to: startDate)!
+//            
+//            let stepSample = HKQuantitySample(type: HKQuantityType(.stepCount), quantity: stepQuantity, start: startDate, end: endDate )
+//            let weightSample = HKQuantitySample(type: HKQuantityType(.bodyMass), quantity: weightQuantity, start: startDate, end: endDate)
+//            
+//            mockSamples.append(stepSample)
+//            mockSamples.append(weightSample)
+//
+//        }
+//        
+//        try! await store.save(mockSamples)
+//        print("Dummy data set up")
+//    }
 }
